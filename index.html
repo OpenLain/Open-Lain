@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Lain | Panel de Identidad Soberana</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    .header { text-align: center; margin-bottom: 24px; }
+    .badge { display: inline-block; padding: 4px 12px; background: #0284c7; color: white; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    h1 { font-size: 24px; margin: 0 0 8px 0; color: #38bdf8; }
+    p { font-size: 13px; color: #94a3b8; margin: 0; line-height: 1.5; }
+    .tabs { display: flex; gap: 8px; background: #0f172a; padding: 4px; border-radius: 8px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: #94a3b8; font-weight: bold; font-size: 12px; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
+    .tab-btn.active { background: #0284c7; color: white; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 11px; color: #cbd5e1; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
+    input, select { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: white; font-size: 13px; box-sizing: border-box; }
+    input:focus, select:focus { outline: none; border-color: #38bdf8; }
+    .btn-main { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 10px; }
+    .btn-main:hover { opacity: 0.95; }
+    .btn-login { background: linear-gradient(135deg, #10b981, #059669); }
+    .status-msg { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 12px; text-align: center; display: none; }
+    .status-success { background: #064e3b; color: #4ade80; border: 1px solid #047857; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="header">
+      <span class="badge">Open Lain S.L. Protocol</span>
+      <h1 id="page-title">Mi Perfil de Identidad</h1>
+      <p id="page-sub">Gestiona y actualiza tus datos sincronizados en tu ordenador y nube personal.</p>
+    </div>
+
+    <!-- Pestañas para alternar entre Login y Registro -->
+    <div class="tabs">
+      <button class="tab-btn" id="tab-register-btn" onclick="switchTab('register')">📝 Nuevo Registro</button>
+      <button class="tab-btn active" id="tab-login-btn" onclick="switchTab('login')">🔑 Iniciar Sesión / Editar</button>
+    </div>
+
+    <!-- VISTA 1: INICIAR SESIÓN CON 1-CLIC -->
+    <div id="view-login">
+      <p style="text-align: center; margin-bottom: 16px; font-size: 13px; color: #cbd5e1;">¿Ya tienes perfil configurado? Haz clic para cargar tus datos y editarlos en 1 segundo.</p>
+      <button class="btn-main btn-login" onclick="loginWithOpenLain()">⚡ Iniciar Sesión con Open Lain</button>
+    </div>
+
+    <!-- VISTA 2: FORMULARIO DE REGISTRO Y EDICIÓN DE DATOS -->
+    <div id="view-form" style="display: none;">
+      <form id="profile-form">
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" id="name" required placeholder="Ej. Juan Pérez">
+        </div>
+
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="email" required placeholder="juan@ejemplo.com">
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="text" id="phone" placeholder="+34 600 000 000">
+        </div>
+
+        <div class="form-group">
+          <label>Preferencia Legal de Cookies (RGPD)</label>
+          <select id="cookies">
+            <option value="minimal">Mínimas / Técnicas necesarias (Recomendado)</option>
+            <option value="strict">Rechazar Todo</option>
+            <option value="all">Aceptar Todo</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-main" id="save-btn">💾 Guardar / Actualizar Datos</button>
+      </form>
+    </div>
+
+    <div id="status" class="status-msg status-success"></div>
+  </div>
+
+  <script src="../sdk/openlain-sdk.js"></script>
+  <script>
+    function switchTab(tab) {
+      const loginView = document.getElementById('view-login');
+      const formView = document.getElementById('view-form');
+      const loginBtn = document.getElementById('tab-login-btn');
+      const regBtn = document.getElementById('tab-register-btn');
+
+      if (tab === 'login') {
+        loginView.style.display = 'block';
+        formView.style.display = 'none';
+        loginBtn.classList.add('active');
+        regBtn.classList.remove('active');
+      } else {
+        loginView.style.display = 'none';
+        formView.style.display = 'block';
+        regBtn.classList.add('active');
+        loginBtn.classList.remove('active');
+      }
+    }
+
+    // 1. INICIAR SESIÓN: Carga los datos guardados en el navegador para modificarlos
+    async function loginWithOpenLain() {
+      try {
+        if (!window.OpenLainProtocol || !window.OpenLainProtocol.isAvailable()) {
+          alert("Por favor, instala o activa la extensión de Open Lain primero.");
+          return;
+        }
+
+        const data = await window.OpenLainProtocol.requestAccess();
+        
+        // Rellenar formulario con los datos recuperados del PC/Nube
+        document.getElementById('name').value = data.identity.fullName || "";
+        document.getElementById('email').value = data.identity.email || "";
+        document.getElementById('phone').value = data.identity.phone || "";
+        if (data.preferences && data.preferences.consent) {
+          document.getElementById('cookies').value = data.preferences.consent.cookies || "minimal";
+        }
+
+        // Abrir la pestaña del formulario para editar
+        switchTab('register');
+        showStatus("✅ <b>¡Sesión iniciada!</b> Tus datos se han cargado. Puedes modificarlos y pulsar Guardar.");
+      } catch (err) {
+        alert("Error al iniciar sesión: " + err.message);
+      }
+    }
+
+    // 2. REGISTRO / GUARDAR CAMBIOS: Envía datos a la extensión
+    document.getElementById('profile-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const updatedProfile = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        cookies: document.getElementById('cookies').value
+      };
+
+      // Emitir mensaje hacia la extensión de Open Lain
+      window.postMessage({
+        type: "OPENLAIN_SAVE_PROFILE",
+        payload: updatedProfile
+      }, "*");
+
+      showStatus("✅ <b>¡Datos guardados!</b> Sincronizados localmente en tu PC y en tu nube personal.");
+    });
+
+    function showStatus(msg) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = msg;
+    }
+  </script>
+</body>
+</html>
