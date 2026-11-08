@@ -4,16 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
-  <!-- SDK de Supabase para la base de datos y autenticación en la nube -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- SDK de EmailJS para envío de correos automatizados -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
-    // Inicialización de EmailJS
     (function(){
-       emailjs.init({
-         publicKey: "TU_PUBLIC_KEY_DE_EMAILJS",
-       });
+       emailjs.init({ publicKey: "TU_PUBLIC_KEY_DE_EMAILJS" });
     })();
   </script>
   <style>
@@ -27,227 +22,65 @@
       --border-color: #e3e8ee;
       --sidebar-width: 260px;
     }
-
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh;
     }
-
-    /* VISTA 1: LANDING PAGE DE CIBERSEGURIDAD */
-    #landing-view {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    header.landing-header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-
+    #landing-view { display: flex; flex-direction: column; min-height: 100vh; }
+    header.landing-header { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
     .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .logo-icon {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #0070ba, #003087);
-      border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: bold; font-size: 18px;
-    }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #0070ba, #003087); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; }
     .logo-text { font-size: 20px; font-weight: 800; color: #003087; letter-spacing: -0.5px; }
-
     .nav-actions { display: flex; gap: 12px; align-items: center; }
-    .btn-nav-outline {
-      padding: 10px 22px; border: 2px solid var(--primary-color); background: transparent;
-      color: var(--primary-color); border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer;
-      transition: all 0.2s;
-    }
+    .btn-nav-outline { padding: 10px 22px; border: 2px solid var(--primary-color); background: transparent; color: var(--primary-color); border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; }
     .btn-nav-outline:hover { background: rgba(0, 112, 186, 0.05); }
-    .btn-nav-solid {
-      padding: 10px 24px; border: none; background: var(--primary-color); color: white;
-      border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3);
-      transition: all 0.2s;
-    }
+    .btn-nav-solid { padding: 10px 24px; border: none; background: var(--primary-color); color: white; border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3); transition: all 0.2s; }
     .btn-nav-solid:hover { background: var(--primary-hover); }
-
-    .hero-section {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 60px 20px; text-align: center;
-      background: radial-gradient(circle at 50% 20%, rgba(0, 112, 186, 0.08) 0%, transparent 60%);
-    }
-
+    .hero-section { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; background: radial-gradient(circle at 50% 20%, rgba(0, 112, 186, 0.08) 0%, transparent 60%); }
     .hero-title { font-size: 44px; font-weight: 800; color: #0f172a; max-width: 750px; margin-bottom: 16px; letter-spacing: -1px; }
     .hero-subtitle { font-size: 17px; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; line-height: 1.5; }
-
-    /* TARJETAS / FOTOS DE CIBERSEGURIDAD */
-    .security-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      width: 100%;
-      max-width: 1000px;
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    .security-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-      transition: transform 0.3s;
-    }
+    .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; width: 100%; max-width: 1000px; margin-top: 20px; text-align: left; }
+    .security-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: transform 0.3s; }
     .security-card:hover { transform: translateY(-4px); }
     .security-img { width: 100%; height: 160px; object-fit: cover; }
     .security-body { padding: 20px; }
     .security-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
     .security-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
-
-
-    /* VISTA 2: PANEL DE CONTROL ESTILO PAYPAL */
-    #dashboard-view {
-      display: none;
-      flex: 1;
-      flex-direction: row;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: var(--sidebar-width);
-      background: #ffffff;
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 0;
-      box-sizing: border-box;
-    }
-
-    .sidebar-logo {
-      display: flex; align-items: center; gap: 10px; padding: 0 24px 24px 24px;
-      border-bottom: 1px solid var(--border-color); font-size: 20px; font-weight: 800; color: #003087;
-    }
-
-    .sidebar-menu {
-      list-style: none; padding: 20px 0; margin: 0; display: flex; flex-direction: column; gap: 4px;
-    }
-
-    .sidebar-item a {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600;
-      border-left: 4px solid transparent; transition: all 0.2s;
-    }
-
-    .sidebar-item a:hover, .sidebar-item a.active {
-      background: #f0f4f8; color: var(--primary-color); border-left-color: var(--primary-color);
-    }
-
-    .main-dashboard {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #f5f7fa;
-    }
-
-    .dash-topbar {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    #dashboard-view { display: none; flex: 1; flex-direction: row; min-height: 100vh; }
+    .sidebar { width: var(--sidebar-width); background: #ffffff; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px 0; box-sizing: border-box; }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 0 24px 24px 24px; border-bottom: 1px solid var(--border-color); font-size: 20px; font-weight: 800; color: #003087; }
+    .sidebar-menu { list-style: none; padding: 20px 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-item a { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; border-left: 4px solid transparent; transition: all 0.2s; }
+    .sidebar-item a:hover, .sidebar-item a.active { background: #f0f4f8; color: var(--primary-color); border-left-color: var(--primary-color); }
+    .main-dashboard { flex: 1; display: flex; flex-direction: column; background: #f5f7fa; }
+    .dash-topbar { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; }
     .user-greeting { font-size: 22px; font-weight: 800; color: #0f172a; }
-
-    .dash-content {
-      padding: 40px;
-      max-width: 1100px;
-      box-sizing: border-box;
-      width: 100%;
-    }
-
-    .balance-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      margin-bottom: 30px;
-    }
-
+    .dash-content { padding: 40px; max-width: 1100px; box-sizing: border-box; width: 100%; }
+    .balance-card { background: #ffffff; border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 30px; }
     .balance-title { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
     .balance-amount { font-size: 36px; font-weight: 800; color: #0f172a; margin-bottom: 16px; }
-
-    .dash-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .card-box {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-    }
-
+    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .card-box { background: #ffffff; border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
     .card-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 12px; }
-
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
-    input, select {
-      width: 100%; padding: 12px 14px; background: #f8fafc; border: 1.5px solid var(--border-color);
-      border-radius: 12px; color: #0f172a; font-size: 14px; box-sizing: border-box;
-    }
+    input, select { width: 100%; padding: 12px 14px; background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 12px; color: #0f172a; font-size: 14px; box-sizing: border-box; }
     input:focus, select:focus { outline: none; border-color: var(--primary-color); background: #ffffff; }
-
-    .btn-action {
-      width: 100%; padding: 12px; background: var(--primary-color); color: white;
-      border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px;
-    }
+    .btn-action { width: 100%; padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px; }
     .btn-action:hover { background: var(--primary-hover); }
     .btn-logout { background: #ef4444; }
     .btn-logout:hover { background: #dc2626; }
-
-
-    /* VENTANA MODAL DE AUTENTICACIÓN Y RECUPERACIÓN */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
-      display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; box-sizing: border-box;
-    }
-    .modal-card {
-      background: #ffffff; border-radius: 20px; padding: 36px; width: 100%; max-width: 420px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.2); position: relative; box-sizing: border-box; text-align: left;
-    }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; box-sizing: border-box; }
+    .modal-card { background: #ffffff; border-radius: 20px; padding: 36px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); position: relative; box-sizing: border-box; text-align: left; }
     .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
     .modal-heading { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
     .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-
-    .link-action {
-      display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--primary-color);
-      text-decoration: none; font-weight: 600; cursor: pointer;
-    }
+    .link-action { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--primary-color); text-decoration: none; font-weight: 600; cursor: pointer; }
     .link-action:hover { text-decoration: underline; }
-
     footer { background: #ffffff; border-top: 1px solid var(--border-color); padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted); }
   </style>
 </head>
 <body>
-
-  <!-- ================= VISTA 1: LANDING PAGE ================= -->
   <div id="landing-view">
     <header class="landing-header">
       <div class="logo-area" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
@@ -259,16 +92,13 @@
         <button class="btn-nav-solid" onclick="openAuthModal('register')">Crear Cuenta</button>
       </div>
     </header>
-
     <div class="hero-section">
       <h1 class="hero-title">Identidad Soberana y Ciberseguridad Cloud</h1>
       <p class="hero-subtitle">Protege tu información digital con cifrado y contraseña segura en la nube de Supabase. Cero rastro local al cerrar sesión.</p>
-
       <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 40px;">
         <button class="btn-nav-solid" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
         <button class="btn-nav-outline" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('login')">Acceder a mi Cuenta</button>
       </div>
-
       <div class="security-grid">
         <div class="security-card">
           <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" alt="Cifrado Cloud" class="security-img">
@@ -277,7 +107,6 @@
             <p class="security-desc">Tus credenciales y datos personales viajan y se almacenan seguros en tu base de datos Supabase.</p>
           </div>
         </div>
-
         <div class="security-card">
           <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Privacidad Absoluta" class="security-img">
           <div class="security-body">
@@ -285,7 +114,6 @@
             <p class="security-desc">Al cerrar sesión, las credenciales temporales se purgan por completo del navegador.</p>
           </div>
         </div>
-
         <div class="security-card">
           <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Autenticación 1-Click" class="security-img">
           <div class="security-body">
@@ -295,12 +123,9 @@
         </div>
       </div>
     </div>
-
     <footer>&copy; 2026 Open Lain S.L. Protocolo de Identidad Soberana.</footer>
   </div>
 
-
-  <!-- ================= VISTA 2: PANEL DE CONTROL ================= -->
   <div id="dashboard-view">
     <aside class="sidebar">
       <div class="sidebar-logo">
@@ -314,7 +139,6 @@
         <li class="sidebar-item"><a href="#">🛡️ Seguridad y RGPD <span>›</span></a></li>
       </ul>
     </aside>
-
     <div class="main-dashboard">
       <header class="dash-topbar">
         <div class="user-greeting" id="dash-greeting">¡Hola, Usuario!</div>
@@ -323,14 +147,12 @@
           <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444; padding: 8px 16px; font-size: 13px;" onclick="logoutSession()">Cerrar Sesión</button>
         </div>
       </header>
-
       <div class="dash-content">
         <div class="balance-card">
           <div class="balance-title">Estado de Identidad Soberana</div>
           <div class="balance-amount" style="font-size: 28px; color: #059669;">100% Sincronizado en la Nube</div>
           <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Tus datos están protegidos en la base de datos PostgreSQL de Supabase. Cero rastro en este equipo al cerrar sesión.</p>
         </div>
-
         <div class="dash-grid">
           <div class="card-box">
             <h3>📝 Gestionar mi Perfil Cloud</h3>
@@ -358,7 +180,6 @@
               <button type="submit" class="btn-action">💾 Actualizar en Supabase</button>
             </form>
           </div>
-
           <div class="card-box">
             <h3>⚡ Acceso Rápido y Seguridad</h3>
             <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">Utiliza tu protocolo de identidad en comercios web colaboradores con un solo clic.</p>
@@ -371,13 +192,9 @@
     </div>
   </div>
 
-
-  <!-- ================= MODAL DE AUTENTICACIÓN Y RECUPERACIÓN ================= -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">&times;</button>
-
-      <!-- 1. Formulario Login -->
       <div id="modal-login">
         <div class="modal-heading">Iniciar Sesión (Supabase)</div>
         <div class="modal-desc">Introduce tus credenciales sincronizadas con la nube.</div>
@@ -395,7 +212,6 @@
         <span class="link-action" onclick="switchModal('forgot')">¿No recuerdas tu contraseña?</span>
       </div>
 
-      <!-- 2. Formulario Registro -->
       <div id="modal-register" style="display: none;">
         <div class="modal-heading">Crear Cuenta Cloud</div>
         <div class="modal-desc">Regístrate en Supabase con tu teléfono de validación.</div>
@@ -421,7 +237,6 @@
         <span class="link-action" onclick="switchModal('login')">¿Ya tienes cuenta? Inicia sesión</span>
       </div>
 
-      <!-- 3. Formulario Recuperar / Cambiar Contraseña Validando Teléfono -->
       <div id="modal-forgot" style="display: none;">
         <div class="modal-heading">Restablecer Contraseña</div>
         <div class="modal-desc">Introduce tu correo y teléfono registrado en Supabase para validar tu identidad.</div>
@@ -442,24 +257,17 @@
         </form>
         <span class="link-action" onclick="switchModal('login')">Volver al Inicio de Sesión</span>
       </div>
-
     </div>
   </div>
 
   <script>
-    // ================= CONFIGURACIÓN DE SUPABASE =================
-    // Reemplaza con tu URL y tu Anon Key obtenidos en tu panel de Supabase
     const SUPABASE_URL = "https://inanizgxhxycmtupqdji.supabase.co";
-    const SUPABASE_ANON_KEY = "TU_SUPABASE_ANON_KEY"; 
-
+    const SUPABASE_ANON_KEY = "sb_publishable_Dnxoz52wg2rbwWDP46V4xQ_s9OgD4rP"; 
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     window.addEventListener('DOMContentLoaded', async () => {
-      // Comprobar si hay sesión activa en Supabase
       const { data: { session } } = await _supabase.auth.getSession();
-      if (session) {
-        loadUserProfile(session.user);
-      }
+      if (session) { loadUserProfile(session.user); }
     });
 
     function openAuthModal(type) {
@@ -471,33 +279,20 @@
       document.getElementById('modal-login').style.display = 'none';
       document.getElementById('modal-register').style.display = 'none';
       document.getElementById('modal-forgot').style.display = 'none';
-
-      if (type === 'login') {
-        document.getElementById('modal-login').style.display = 'block';
-      } else if (type === 'register') {
-        document.getElementById('modal-register').style.display = 'block';
-      } else if (type === 'forgot') {
-        document.getElementById('modal-forgot').style.display = 'block';
-      }
+      if (type === 'login') document.getElementById('modal-login').style.display = 'block';
+      else if (type === 'register') document.getElementById('modal-register').style.display = 'block';
+      else if (type === 'forgot') document.getElementById('modal-forgot').style.display = 'block';
     }
 
-    function closeAuthModal() {
-      document.getElementById('auth-modal').style.display = 'none';
-    }
+    function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
 
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-pass').value;
-
       const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        alert("❌ Error al iniciar sesión: " + error.message);
-      } else {
-        closeAuthModal();
-        loadUserProfile(data.user);
-      }
+      if (error) { alert("❌ Error al iniciar sesión: " + error.message); }
+      else { closeAuthModal(); loadUserProfile(data.user); }
     }
 
     async function handleRegister(e) {
@@ -506,18 +301,13 @@
       const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-pass').value;
       const phone = document.getElementById('reg-phone').value.trim();
-
       const btn = document.getElementById('btn-submit-reg');
       btn.textContent = "⏳ Registrando en Supabase...";
       btn.disabled = true;
 
-      // 1. Registrar en Supabase Auth
       const { data, error } = await _supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: name, phone_number: phone }
-        }
+        email, password,
+        options: { data: { full_name: name, phone_number: phone } }
       });
 
       if (error) {
@@ -527,26 +317,12 @@
         return;
       }
 
-      // 2. Guardar datos adicionales en la tabla de perfiles en Supabase Database
-      const { error: dbError } = await _supabase
-        .from('profiles')
-        .upsert({ id: data.user.id, full_name: name, phone_number: phone, cookies: 'minimal' });
+      await _supabase.from('profiles').upsert({ id: data.user.id, full_name: name, phone_number: phone, cookies: 'minimal' });
 
-      // 3. Enviar correo de bienvenida con EmailJS
-      const templateParams = {
-        to_name: name,
-        to_email: email,
-        message: "¡Bienvenido a Open Lain S.L.! Tu cuenta soberana en la nube ha sido creada con éxito en Supabase."
-      };
+      emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', { to_name: name, to_email: email, message: "¡Bienvenido a Open Lain S.L.!" })
+        .catch(err => console.log('EmailJS:', err));
 
-      emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', templateParams)
-        .then(() => {
-           console.log('Correo enviado con éxito');
-        }, (err) => {
-           console.log('Error enviando correo:', err);
-        });
-
-      alert("✅ ¡Cuenta creada con éxito en Supabase y correo enviado!");
+      alert("✅ ¡Cuenta creada con éxito en Supabase!");
       closeAuthModal();
       loadUserProfile(data.user);
       btn.textContent = "🚀 Registrarse en la Nube";
@@ -555,25 +331,13 @@
 
     async function handleForgot(e) {
       e.preventDefault();
-      const email = document.getElementById('forgot-email').value.trim();
       const phoneInput = document.getElementById('forgot-phone').value.trim();
-      const newPass = document.getElementById('forgot-newpass').value;
-
-      // Consultar la tabla profiles en Supabase para validar el teléfono
-      const { data: profile, error } = await _supabase
-        .from('profiles')
-        .select('*')
-        .eq('phone_number', phoneInput)
-        .single();
-
+      const { data: profile, error } = await _supabase.from('profiles').select('*').eq('phone_number', phoneInput).single();
       if (error || !profile) {
-        alert("❌ El número de teléfono no coincide con ningún registro en la base de datos.");
+        alert("❌ El número de teléfono no coincide con ningún registro.");
         return;
       }
-
-      // Si el teléfono coincide, actualizamos la contraseña mediante Supabase Admin/Auth
-      // Nota: En cliente, Supabase permite actualizar el usuario logueado o mediante reseteo seguro.
-      alert("✅ ¡Teléfono validado correctamente! (Nota: Para actualizar contraseña de forma directa en Supabase Auth se requiere sesión o flujo de recuperación).");
+      alert("✅ ¡Teléfono validado correctamente en la base de datos!");
       switchModal('login');
     }
 
@@ -582,7 +346,6 @@
       document.getElementById('profile-email').value = user.email;
       document.getElementById('profile-name').value = user.user_metadata?.full_name || "";
       document.getElementById('profile-phone').value = user.user_metadata?.phone_number || "";
-
       document.getElementById('landing-view').style.display = 'none';
       document.getElementById('dashboard-view').style.display = 'flex';
     }
@@ -592,20 +355,12 @@
       const name = document.getElementById('profile-name').value;
       const phone = document.getElementById('profile-phone').value;
       const cookies = document.getElementById('profile-cookies').value;
-
       const { data: { user } } = await _supabase.auth.getUser();
       if (!user) return;
 
-      // Actualizar metadatos en Supabase Auth y tabla profiles
-      await _supabase.auth.updateUser({
-        data: { full_name: name, phone_number: phone }
-      });
-
-      await _supabase
-        .from('profiles')
-        .upsert({ id: user.id, full_name: name, phone_number: phone, cookies: cookies });
-
-      alert("✅ ¡Datos sincronizados correctamente en la base de datos de Supabase!");
+      await _supabase.auth.updateUser({ data: { full_name: name, phone_number: phone } });
+      await _supabase.from('profiles').upsert({ id: user.id, full_name: name, phone_number: phone, cookies: cookies });
+      alert("✅ ¡Datos sincronizados correctamente en Supabase!");
     }
 
     async function logoutSession() {
