@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
-  <!-- SDK oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- SDK de EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
     (function(){
@@ -320,14 +318,13 @@
         return;
       }
 
-      await _supabase.from('profiles').upsert({ id: data.user.id, full_name: name, phone_number: phone, cookies: 'minimal' });
-
-      emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', { to_name: name, to_email: email, message: "¡Bienvenido a Open Lain S.L.!" })
-        .catch(err => console.log('EmailJS:', err));
-
       alert("✅ ¡Cuenta creada con éxito en Supabase!");
       closeAuthModal();
-      loadUserProfile(data.user);
+      if (data.user) {
+        loadUserProfile(data.user);
+      } else {
+        switchModal('login');
+      }
       btn.textContent = "🚀 Registrarse en la Nube";
       btn.disabled = false;
     }
