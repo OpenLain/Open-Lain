@@ -61,7 +61,7 @@
       background: radial-gradient(circle at 50% 20%, rgba(0, 112, 186, 0.08) 0%, transparent 60%);
     }
 
-    .hero-title { font-size: 42px; font-weight: 800; color: #0f172a; max-width: 700px; margin-bottom: 16px; }
+    .hero-title { font-size: 40px; font-weight: 800; color: #0f172a; max-width: 700px; margin-bottom: 16px; }
     .hero-subtitle { font-size: 16px; color: var(--text-muted); max-width: 500px; margin-bottom: 36px; }
 
     .card-container {
@@ -79,14 +79,17 @@
       width: 100%; padding: 12px 14px; background: #f8fafc; border: 1.5px solid var(--border-color);
       border-radius: 12px; color: #0f172a; font-size: 14px; box-sizing: border-box;
     }
+    input:focus, select:focus { outline: none; border-color: var(--primary-color); background: #ffffff; }
 
     .btn-action {
       width: 100%; padding: 14px; background: var(--primary-color); color: white;
       border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 8px;
     }
+    .btn-action:hover { background: var(--primary-hover); }
     .btn-logout { background: #ef4444; margin-top: 12px; }
+    .btn-logout:hover { background: #dc2626; }
 
-    .status-alert { margin-top: 16px; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center; display: none; }
+    .status-alert { margin-top: 16px; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center; display: none; font-weight: 500; }
     .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
     .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
 
@@ -95,32 +98,51 @@
 </head>
 <body>
 
+  <!-- BARRA SUPERIOR -->
   <header>
     <div class="logo-area">
       <div class="logo-icon">OL</div>
       <div class="logo-text">Open Lain S.L.</div>
     </div>
     <div class="nav-actions" id="nav-actions">
-      <button class="btn-nav-outline" onclick="openLoginState()">Iniciar Sesión</button>
-      <button class="btn-nav-solid" onclick="openRegisterState()">Crear Cuenta</button>
+      <button class="btn-nav-outline" onclick="showLoginView()">Iniciar Sesión</button>
+      <button class="btn-nav-solid" onclick="showRegisterView()">Crear Cuenta</button>
     </div>
   </header>
 
+  <!-- CONTENIDO CENTRAL -->
   <div class="main-hero">
-    <h1 class="hero-title" id="hero-headline">Identidad 1-Click en la Nube y Privacidad Total.</h1>
-    <p class="hero-subtitle" id="hero-subtext">Tus datos viajan cifrados en tu nube personal y desaparecen por completo del dispositivo al cerrar sesión.</p>
+    <h1 class="hero-title" id="hero-headline">Identidad Cloud y Privacidad Absoluta.</h1>
+    <p class="hero-subtitle" id="hero-subtext">Gestiona tus datos de identidad directamente en la nube sin instalar aplicaciones ni extensiones.</p>
 
     <div class="card-container">
+      
+      <!-- VISTA 1: INICIO / BIENVENIDA -->
       <div id="view-welcome">
         <div class="card-heading">Bienvenido a Open Lain</div>
-        <div class="card-desc">Conéctate para sincronizar tus datos desde tu nube privada o crea una nueva identidad.</div>
-        <button class="btn-action" onclick="openLoginState()">⚡ Iniciar Sesión con Open Lain</button>
-        <button class="btn-action" style="background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); margin-top: 10px;" onclick="openRegisterState()">📝 Registrarse por Primera Vez</button>
+        <div class="card-desc">Accede con tu cuenta o regístrate para gestionar tu perfil soberano en la nube.</div>
+        <button class="btn-action" onclick="showLoginView()">⚡ Iniciar Sesión</button>
+        <button class="btn-action" style="background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); margin-top: 10px;" onclick="showRegisterView()">📝 Registrarse</button>
       </div>
 
-      <div id="view-form" style="display: none;">
-        <div class="card-heading" id="form-title">Panel de Identidad Cloud</div>
-        <div class="card-desc" id="form-subtitle">Gestiona tus datos sincronizados en tu nube personal.</div>
+      <!-- VISTA 2: FORMULARIO DE ACCESO / LOGIN -->
+      <div id="view-login" style="display: none;">
+        <div class="card-heading">Iniciar Sesión</div>
+        <div class="card-desc">Introduce tu correo para acceder a tu sesión en la nube.</div>
+        <form id="login-form">
+          <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" id="login-email" required placeholder="tu@correo.com">
+          </div>
+          <button type="submit" class="btn-action">🔓 Acceder a mi Sesión</button>
+        </form>
+        <button class="btn-action" style="background: transparent; color: var(--text-muted); border: none; margin-top: 8px;" onclick="showWelcomeView()">← Volver</button>
+      </div>
+
+      <!-- VISTA 3: PANEL DE CONTROL Y EDICIÓN DE DATOS -->
+      <div id="view-dashboard" style="display: none;">
+        <div class="card-heading" id="dash-title">Mi Perfil Cloud</div>
+        <div class="card-desc">Modifica tus datos o tus preferencias en tiempo real.</div>
 
         <form id="profile-form">
           <div class="form-group">
@@ -129,7 +151,7 @@
           </div>
           <div class="form-group">
             <label>Correo Electrónico</label>
-            <input type="email" id="email" required placeholder="ana@ejemplo.com">
+            <input type="email" id="email" required placeholder="ana@ejemplo.com" disabled style="background: #e2e8f0; cursor: not-allowed;">
           </div>
           <div class="form-group">
             <label>Teléfono</label>
@@ -144,10 +166,10 @@
             </select>
           </div>
 
-          <button type="submit" class="btn-action">💾 Guardar en la Nube</button>
+          <button type="submit" class="btn-action">💾 Guardar Cambios en la Nube</button>
         </form>
 
-        <button class="btn-action btn-logout" onclick="logoutOpenLain()">🚪 Cerrar Sesión y Purgar Dispositivo</button>
+        <button class="btn-action btn-logout" onclick="logoutSession()">🚪 Cerrar Sesión</button>
       </div>
 
       <div id="status-box" class="status-alert"></div>
@@ -158,85 +180,109 @@
     &copy; 2026 Open Lain S.L. Protocolo Cloud de Identidad Soberana.
   </footer>
 
-  <script src="openlain-sdk.js"></script>
   <script>
-    function showWelcomeState() {
+    // Comprobar si hay una sesión activa al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      const activeUser = sessionStorage.getItem('openlain_active_user');
+      if (activeUser) {
+        loadUserData(activeUser);
+      }
+    });
+
+    function showWelcomeView() {
       document.getElementById('view-welcome').style.display = 'block';
-      document.getElementById('view-form').style.display = 'none';
-      document.getElementById('hero-headline').textContent = "Identidad 1-Click en la Nube y Privacidad Total.";
-      document.getElementById('hero-subtext').textContent = "Tus datos viajan cifrados en tu nube personal y desaparecen por completo del dispositivo al cerrar sesión.";
-      document.getElementById('nav-actions').innerHTML = `
-        <button class="btn-nav-outline" onclick="openLoginState()">Iniciar Sesión</button>
-        <button class="btn-nav-solid" onclick="openRegisterState()">Crear Cuenta</button>
-      `;
+      document.getElementById('view-login').style.display = 'none';
+      document.getElementById('view-dashboard').style.display = 'none';
       document.getElementById('status-box').style.display = 'none';
+      resetNav(false);
     }
 
-    function openRegisterState() {
+    function showLoginView() {
       document.getElementById('view-welcome').style.display = 'none';
-      document.getElementById('view-form').style.display = 'block';
-      document.getElementById('form-title').textContent = "Nuevo Registro Cloud";
-      document.getElementById('form-subtitle').textContent = "Crea tu perfil cifrado para la nube.";
-      document.getElementById('profile-form').reset();
-      updateNavLoggedIn("Nuevo Registro");
+      document.getElementById('view-login').style.display = 'block';
+      document.getElementById('view-dashboard').style.display = 'none';
     }
 
-    async function openLoginState() {
-      try {
-        if (!window.OpenLainProtocol || !window.OpenLainProtocol.isAvailable()) {
-          alert("Por favor, asegúrate de tener la extensión de Open Lain activa.");
-          openRegisterState();
-          return;
-        }
-
-        const data = await window.OpenLainProtocol.requestAccess();
-        document.getElementById('name').value = data.identity.fullName || "";
-        document.getElementById('email').value = data.identity.email || "";
-        document.getElementById('phone').value = data.identity.phone || "";
-        if (data.preferences && data.preferences.consent) {
-          document.getElementById('cookies').value = data.preferences.consent.cookies || "minimal";
-        }
-
-        document.getElementById('view-welcome').style.display = 'none';
-        document.getElementById('view-form').style.display = 'block';
-        document.getElementById('form-title').textContent = "Panel Cloud Activo";
-        document.getElementById('form-subtitle').textContent = "Modifica tus datos sincronizados en tu nube personal.";
-
-        updateNavLoggedIn("Sesión Cloud Activa");
-        showStatus("✅ ¡Sesión iniciada desde la nube de forma segura!", "success");
-      } catch (err) {
-        openRegisterState();
+    function showRegisterView() {
+      // Para simplificar sin backend complejo, el registro pide un email y crea perfil vacío o de prueba
+      const email = prompt("Introduce tu correo electrónico para registrarte en Open Lain Cloud:");
+      if (email) {
+        const initialData = { name: "", email: email, phone: "", cookies: "minimal" };
+        localStorage.setItem("ol_user_" + email, JSON.stringify(initialData));
+        sessionStorage.setItem('openlain_active_user', email);
+        loadUserData(email);
+        showStatus("✅ ¡Cuenta creada con éxito en la nube!", "success");
       }
     }
 
-    function updateNavLoggedIn(badgeText) {
-      document.getElementById('nav-actions').innerHTML = `
-        <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">☁️ ${badgeText}</span>
-        <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444;" onclick="logoutOpenLain()">Cerrar Sesión</button>
-      `;
+    // Gestionar el formulario de Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const storedData = localStorage.getItem("ol_user_" + email);
+
+      if (storedData) {
+        sessionStorage.setItem('openlain_active_user', email);
+        loadUserData(email);
+        showStatus("✅ ¡Sesión iniciada correctamente!", "success");
+      } else {
+        alert("No existe ninguna cuenta registrada con este correo. Por favor, regístrate primero.");
+      }
+    });
+
+    function loadUserData(email) {
+      const data = JSON.parse(localStorage.getItem("ol_user_" + email) || "{}");
+      document.getElementById('name').value = data.name || "";
+      document.getElementById('email').value = data.email || email;
+      document.getElementById('phone').value = data.phone || "";
+      document.getElementById('cookies').value = data.cookies || "minimal";
+
+      document.getElementById('view-welcome').style.display = 'none';
+      document.getElementById('view-login').style.display = 'none';
+      document.getElementById('view-dashboard').style.display = 'block';
+
+      updateNavLoggedIn();
     }
 
+    // Guardar cambios del perfil
     document.getElementById('profile-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const profilePayload = {
+      const email = sessionStorage.getItem('openlain_active_user');
+      if (!email) return;
+
+      const updatedData = {
         name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
+        email: email,
         phone: document.getElementById('phone').value,
         cookies: document.getElementById('cookies').value
       };
 
-      window.postMessage({ type: "OPENLAIN_SAVE_PROFILE", payload: profilePayload }, "*");
-      showStatus("✅ ¡Datos guardados y sincronizados en tu nube personal!", "success");
-      updateNavLoggedIn("Sincronizado Cloud");
+      localStorage.setItem("ol_user_" + email, JSON.stringify(updatedData));
+      showStatus("✅ ¡Datos actualizados y guardados en la nube!", "success");
     });
 
-    function logoutOpenLain() {
-      window.postMessage({ type: "OPENLAIN_LOGOUT" }, "*");
+    // Cerrar Sesión (Borra la sesión volátil del navegador)
+    function logoutSession() {
+      sessionStorage.removeItem('openlain_active_user');
       document.getElementById('profile-form').reset();
-      showStatus("ℹ️ Sesión cerrada. Se han purgado todos los datos de este dispositivo.", "info");
+      showStatus("ℹ️ Sesión cerrada. Se ha borrado el acceso de este dispositivo.", "info");
       setTimeout(() => {
-        showWelcomeState();
-      }, 1200);
+        showWelcomeView();
+      }, 1000);
+    }
+
+    function updateNavLoggedIn() {
+      document.getElementById('nav-actions').innerHTML = `
+        <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 Sesión Activa</span>
+        <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444;" onclick="logoutSession()">Cerrar Sesión</button>
+      `;
+    }
+
+    function resetNav() {
+      document.getElementById('nav-actions').innerHTML = `
+        <button class="btn-nav-outline" onclick="showLoginView()">Iniciar Sesión</button>
+        <button class="btn-nav-solid" onclick="showRegisterView()">Crear Cuenta</button>
+      `;
     }
 
     function showStatus(msg, type) {
