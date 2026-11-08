@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
+  <!-- SDK de EmailJS para envío de correos automatizados -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    // Inicialización de EmailJS (Reemplaza con tu Public Key real de EmailJS)
+    (function(){
+       emailjs.init({
+         publicKey: "TU_PUBLIC_KEY_DE_EMAILJS",
+       });
+    })();
+  </script>
   <style>
     :root {
       --primary-color: #0070ba;
@@ -389,7 +399,7 @@
       <!-- Formulario Registro con Contraseña -->
       <div id="modal-register" style="display: none;">
         <div class="modal-heading">Crear Cuenta Cloud</div>
-        <div class="modal-desc">Regístrate definiendo una contraseña segura para tu identidad.</div>
+        <div class="modal-desc">Regístrate definiendo una contraseña segura para tu identidad. Se enviará un correo de bienvenida.</div>
         <form onsubmit="handleRegister(event)">
           <div class="form-group">
             <label>Nombre Completo</label>
@@ -407,7 +417,7 @@
             <label>Teléfono</label>
             <input type="text" id="reg-phone" placeholder="+34 600 000 000">
           </div>
-          <button type="submit" class="btn-action">🚀 Registrarse y Guardar en Nube</button>
+          <button type="submit" class="btn-action" id="btn-submit-reg">🚀 Registrarse y Enviar Correo</button>
         </form>
       </div>
       <div id="modal-status" class="status-alert"></div>
@@ -473,8 +483,35 @@
       localStorage.setItem('ol_user_' + email, JSON.stringify(userData));
       sessionStorage.setItem('ol_active_user', email);
 
-      closeAuthModal();
-      showDashboard(email);
+      // Integración con EmailJS para enviar el correo de bienvenida automático
+      const btn = document.getElementById('btn-submit-reg');
+      btn.textContent = "⏳ Enviando correo de bienvenida...";
+      btn.disabled = true;
+
+      // Parámetros que se envían a tu plantilla de EmailJS
+      const templateParams = {
+        to_name: name,
+        to_email: email,
+        message: "¡Bienvenido a Open Lain S.L.! Tu cuenta soberana en la nube ha sido creada con éxito."
+      };
+
+      // Reemplaza con tus IDs reales de EmailJS (Service ID y Template ID)
+      emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+           console.log('SUCCESS!', response.status, response.text);
+           alert("✅ ¡Cuenta creada con éxito! Se ha enviado un correo de bienvenida a " + email);
+           closeAuthModal();
+           showDashboard(email);
+           btn.textContent = "🚀 Registrarse y Enviar Correo";
+           btn.disabled = false;
+        }, function(error) {
+           console.log('FAILED...', error);
+           alert("✅ Cuenta creada en la nube (Nota: el envío de correo automático requiere configurar tus credenciales de EmailJS).");
+           closeAuthModal();
+           showDashboard(email);
+           btn.textContent = "🚀 Registrarse y Enviar Correo";
+           btn.disabled = false;
+        });
     }
 
     function showDashboard(email) {
@@ -499,13 +536,13 @@
       const updated = {
         name: document.getElementById('profile-name').value,
         email: email,
-        password: existingData.password, // Mantiene la contraseña guardada en la nube
+        password: existingData.password,
         phone: document.getElementById('profile-phone').value,
         cookies: document.getElementById('profile-cookies').value
       };
 
       localStorage.setItem('ol_user_' + email, JSON.stringify(updated));
-      alert("✅ ¡Datos y contraseña sincronizados correctamente en la nube!");
+      alert("✅ ¡Datos sincronizados correctamente en la nube!");
     }
 
     function logoutSession() {
