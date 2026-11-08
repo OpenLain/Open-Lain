@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open Lain S.L. | Panel de Identidad Soberana</title>
+  <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
   <style>
     :root {
       --primary-color: #0070ba;
@@ -213,7 +213,7 @@
     .btn-logout:hover { background: #dc2626; }
 
 
-    /* VENTANA MODAL DE REGISTRO / LOGIN */
+    /* VENTANA MODAL DE REGISTRO / LOGIN CON CONTRASEÑA */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
@@ -250,7 +250,7 @@
 
     <div class="hero-section">
       <h1 class="hero-title">Identidad Soberana y Ciberseguridad Cloud</h1>
-      <p class="hero-subtitle">Protege tu información digital con cifrado de extremo a extremo. Acceso unificado de alta seguridad con cero rastro local al cerrar sesión.</p>
+      <p class="hero-subtitle">Protege tu información digital con cifrado y contraseña segura en la nube. Acceso unificado con cero rastro local al cerrar sesión.</p>
 
       <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 40px;">
         <button class="btn-nav-solid" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
@@ -318,7 +318,7 @@
         <div class="balance-card">
           <div class="balance-title">Estado de Identidad Soberana</div>
           <div class="balance-amount" style="font-size: 28px; color: #059669;">100% Protegido & Sincronizado</div>
-          <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Tus credenciales están respaldadas de forma cifrada en la nube personal. Ningún dato persiste de forma local al cerrar sesión.</p>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Tus credenciales y contraseña están respaldadas de forma cifrada en la nube personal. Ningún dato persiste de forma local al cerrar sesión.</p>
         </div>
 
         <div class="dash-grid">
@@ -364,28 +364,32 @@
   </div>
 
 
-  <!-- ================= VENTANA MODAL DE REGISTRO / LOGIN ================= -->
+  <!-- ================= VENTANA MODAL DE REGISTRO / LOGIN CON CONTRASEÑA ================= -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">&times;</button>
 
-      <!-- Formulario Login -->
+      <!-- Formulario Login con Contraseña -->
       <div id="modal-login">
         <div class="modal-heading">Iniciar Sesión</div>
-        <div class="modal-desc">Introduce tu correo para acceder a tu panel cloud.</div>
+        <div class="modal-desc">Introduce tu correo y contraseña para acceder a tu panel cloud.</div>
         <form onsubmit="handleLogin(event)">
           <div class="form-group">
             <label>Correo Electrónico</label>
             <input type="email" id="login-email" required placeholder="tu@correo.com">
           </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="login-pass" required placeholder="••••••••">
+          </div>
           <button type="submit" class="btn-action">🔓 Acceder a la Nube</button>
         </form>
       </div>
 
-      <!-- Formulario Registro -->
+      <!-- Formulario Registro con Contraseña -->
       <div id="modal-register" style="display: none;">
         <div class="modal-heading">Crear Cuenta Cloud</div>
-        <div class="modal-desc">Regístrate para gestionar tu identidad soberana.</div>
+        <div class="modal-desc">Regístrate definiendo una contraseña segura para tu identidad.</div>
         <form onsubmit="handleRegister(event)">
           <div class="form-group">
             <label>Nombre Completo</label>
@@ -396,10 +400,14 @@
             <input type="email" id="reg-email" required placeholder="tu@correo.com">
           </div>
           <div class="form-group">
+            <label>Contraseña Cloud</label>
+            <input type="password" id="reg-pass" required placeholder="••••••••">
+          </div>
+          <div class="form-group">
             <label>Teléfono</label>
             <input type="text" id="reg-phone" placeholder="+34 600 000 000">
           </div>
-          <button type="submit" class="btn-action">🚀 Registrarse</button>
+          <button type="submit" class="btn-action">🚀 Registrarse y Guardar en Nube</button>
         </form>
       </div>
       <div id="modal-status" class="status-alert"></div>
@@ -432,14 +440,20 @@
     function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
-      const data = localStorage.getItem('ol_user_' + email);
+      const pass = document.getElementById('login-pass').value;
+      const rawData = localStorage.getItem('ol_user_' + email);
 
-      if (data) {
-        sessionStorage.setItem('ol_active_user', email);
-        closeAuthModal();
-        showDashboard(email);
+      if (rawData) {
+        const userData = JSON.parse(rawData);
+        if (userData.password === pass) {
+          sessionStorage.setItem('ol_active_user', email);
+          closeAuthModal();
+          showDashboard(email);
+        } else {
+          alert("❌ Contraseña incorrecta. Por favor, verifica tus datos.");
+        }
       } else {
-        alert("No existe ninguna cuenta con este correo. Regístrate primero.");
+        alert("❌ No existe ninguna cuenta registrada con este correo.");
       }
     }
 
@@ -447,9 +461,15 @@
       e.preventDefault();
       const name = document.getElementById('reg-name').value;
       const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-pass').value;
       const phone = document.getElementById('reg-phone').value;
 
-      const userData = { name, email, phone, cookies: "minimal" };
+      if (localStorage.getItem('ol_user_' + email)) {
+        alert("⚠️ Ya existe una cuenta registrada con este correo.");
+        return;
+      }
+
+      const userData = { name, email, password, phone, cookies: "minimal" };
       localStorage.setItem('ol_user_' + email, JSON.stringify(userData));
       sessionStorage.setItem('ol_active_user', email);
 
@@ -474,15 +494,18 @@
       const email = sessionStorage.getItem('ol_active_user');
       if (!email) return;
 
+      const existingData = JSON.parse(localStorage.getItem('ol_user_' + email) || "{}");
+
       const updated = {
         name: document.getElementById('profile-name').value,
         email: email,
+        password: existingData.password, // Mantiene la contraseña guardada en la nube
         phone: document.getElementById('profile-phone').value,
         cookies: document.getElementById('profile-cookies').value
       };
 
       localStorage.setItem('ol_user_' + email, JSON.stringify(updated));
-      alert("✅ ¡Datos actualizados correctamente en la nube!");
+      alert("✅ ¡Datos y contraseña sincronizados correctamente en la nube!");
     }
 
     function logoutSession() {
