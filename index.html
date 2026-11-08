@@ -181,7 +181,6 @@
   </footer>
 
   <script>
-    // Comprobar si hay una sesión activa al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       const activeUser = sessionStorage.getItem('openlain_active_user');
       if (activeUser) {
@@ -204,7 +203,6 @@
     }
 
     function showRegisterView() {
-      // Para simplificar sin backend complejo, el registro pide un email y crea perfil vacío o de prueba
       const email = prompt("Introduce tu correo electrónico para registrarte en Open Lain Cloud:");
       if (email) {
         const initialData = { name: "", email: email, phone: "", cookies: "minimal" };
@@ -215,7 +213,6 @@
       }
     }
 
-    // Gestionar el formulario de Login
     document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
@@ -244,24 +241,24 @@
       updateNavLoggedIn();
     }
 
-    // Guardar cambios del perfil
     document.getElementById('profile-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = sessionStorage.getItem('openlain_active_user');
-      if (!email) return;
+      const email = sessionStorage.getItem('openlain_session_email') || sessionStorage.getItem('openlain_active_user');
+      // Aseguramos capturar el email correctamente
+      const activeEmail = document.getElementById('email').value;
+      if (!activeEmail) return;
 
       const updatedData = {
         name: document.getElementById('name').value,
-        email: email,
+        email: activeEmail,
         phone: document.getElementById('phone').value,
         cookies: document.getElementById('cookies').value
       };
 
-      localStorage.setItem("ol_user_" + email, JSON.stringify(updatedData));
+      localStorage.setItem("ol_user_" + activeEmail, JSON.stringify(updatedData));
       showStatus("✅ ¡Datos actualizados y guardados en la nube!", "success");
     });
 
-    // Cerrar Sesión (Borra la sesión volátil del navegador)
     function logoutSession() {
       sessionStorage.removeItem('openlain_active_user');
       document.getElementById('profile-form').reset();
