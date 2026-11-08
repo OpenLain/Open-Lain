@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
+  <!-- SDK oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- SDK de EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
     (function(){
@@ -263,7 +265,8 @@
   <script>
     const SUPABASE_URL = "https://inanizgxhxycmtupqdji.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_Dnxoz52wg2rbwWDP46V4xQ_s9OgD4rP"; 
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await _supabase.auth.getSession();
