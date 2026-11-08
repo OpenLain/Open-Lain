@@ -2,115 +2,364 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Open Lain | Panel de Identidad Soberana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Lain | Identidad Soberana y Privacidad</title>
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
-    .header { text-align: center; margin-bottom: 24px; }
-    .badge { display: inline-block; padding: 4px 12px; background: #0284c7; color: white; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    h1 { font-size: 24px; margin: 0 0 8px 0; color: #38bdf8; }
-    p { font-size: 13px; color: #94a3b8; margin: 0; line-height: 1.5; }
-    .tabs { display: flex; gap: 8px; background: #0f172a; padding: 4px; border-radius: 8px; margin-bottom: 20px; }
-    .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: #94a3b8; font-weight: bold; font-size: 12px; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
-    .tab-btn.active { background: #0284c7; color: white; }
-    .form-group { margin-bottom: 14px; }
-    label { display: block; font-size: 11px; color: #cbd5e1; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
-    input, select { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: white; font-size: 13px; box-sizing: border-box; }
-    input:focus, select:focus { outline: none; border-color: #38bdf8; }
-    .btn-main { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 10px; }
-    .btn-main:hover { opacity: 0.95; }
-    .btn-login { background: linear-gradient(135deg, #10b981, #059669); }
-    .status-msg { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 12px; text-align: center; display: none; }
-    .status-success { background: #064e3b; color: #4ade80; border: 1px solid #047857; }
+    :root {
+      --primary-color: #0070ba;
+      --primary-hover: #005ea6;
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-muted: #6c757d;
+      --border-color: #e3e8ee;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Barra de navegación superior estilo PayPal moderno */
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #0070ba, #003087);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(0, 112, 186, 0.3);
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #003087;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-nav-outline {
+      padding: 10px 22px;
+      border: 2px solid var(--primary-color);
+      background: transparent;
+      color: var(--primary-color);
+      border-radius: 24px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-outline:hover {
+      background: rgba(0, 112, 186, 0.05);
+    }
+
+    .btn-nav-solid {
+      padding: 10px 24px;
+      border: none;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 24px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 112, 186, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-solid:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Contenedor Principal Estilo Hero */
+    .main-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 20%, rgba(0, 112, 186, 0.08) 0%, transparent 60%);
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 800;
+      color: #0f172a;
+      max-width: 700px;
+      margin-bottom: 16px;
+      line-height: 1.2;
+      letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    /* Tarjeta Interactiva / Modal Container */
+    .card-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+      text-align: left;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .card-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      color: #0f172a;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 112, 186, 0.1);
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 112, 186, 0.25);
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-logout {
+      background: #ef4444;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+      margin-top: 12px;
+    }
+
+    .btn-logout:hover {
+      background: #dc2626;
+    }
+
+    .status-alert {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      text-align: center;
+      display: none;
+      font-weight: 500;
+    }
+    .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+    /* Footer Moderno */
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="header">
-      <span class="badge">Open Lain S.L. Protocol</span>
-      <h1 id="page-title">Mi Perfil de Identidad</h1>
-      <p id="page-sub">Gestiona y actualiza tus datos sincronizados en tu ordenador y nube personal.</p>
+  <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon">OL</div>
+      <div class="logo-text">Open Lain S.L.</div>
     </div>
-
-    <!-- Pestañas para alternar entre Login y Registro -->
-    <div class="tabs">
-      <button class="tab-btn" id="tab-register-btn" onclick="switchTab('register')">📝 Nuevo Registro</button>
-      <button class="tab-btn active" id="tab-login-btn" onclick="switchTab('login')">🔑 Iniciar Sesión / Editar</button>
+    <div class="nav-actions" id="nav-actions">
+      <button class="btn-nav-outline" onclick="openLoginState()">Iniciar Sesión</button>
+      <button class="btn-nav-solid" onclick="openRegisterState()">Crear Cuenta</button>
     </div>
+  </header>
 
-    <!-- VISTA 1: INICIAR SESIÓN CON 1-CLIC -->
-    <div id="view-login">
-      <p style="text-align: center; margin-bottom: 16px; font-size: 13px; color: #cbd5e1;">¿Ya tienes perfil configurado? Haz clic para cargar tus datos y editarlos en 1 segundo.</p>
-      <button class="btn-main btn-login" onclick="loginWithOpenLain()">⚡ Iniciar Sesión con Open Lain</button>
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="main-hero">
+    <h1 class="hero-title" id="hero-headline">Identidad 1-Click y Privacidad Soberana.</h1>
+    <p class="hero-subtitle" id="hero-subtext">Navega por todo internet sin rellenar formularios interminables ni aceptar cookies manualmente. Todo seguro en tu dispositivo y nube personal.</p>
+
+    <!-- TARJETA DINÁMICA DE ACCESO / GESTIÓN -->
+    <div class="card-container">
+      
+      <!-- VISTA 1: BIENVENIDA / ACCIÓN INICIAL -->
+      <div id="view-welcome">
+        <div class="card-heading">Bienvenido a Open Lain</div>
+        <div class="card-desc">Accede a tu bóveda personal para configurar tus datos o gestionarlos al instante.</div>
+        <button class="btn-action" onclick="openLoginState()">⚡ Iniciar Sesión con Open Lain</button>
+        <button class="btn-action" style="background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); box-shadow: none; margin-top: 10px;" onclick="openRegisterState()">📝 Registrarse por Primera Vez</button>
+      </div>
+
+      <!-- VISTA 2: FORMULARIO DE REGISTRO / EDICIÓN -->
+      <div id="view-form" style="display: none;">
+        <div class="card-heading" id="form-title">Configurar mi Perfil</div>
+        <div class="card-desc" id="form-subtitle">Introduce tus datos para sincronizarlos en tu PC y navegador.</div>
+
+        <form id="profile-form">
+          <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" id="name" required placeholder="Ej. Ana García">
+          </div>
+          <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" id="email" required placeholder="ana@ejemplo.com">
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" id="phone" placeholder="+34 600 000 000">
+          </div>
+          <div class="form-group">
+            <label>Preferencia de Cookies (RGPD)</label>
+            <select id="cookies">
+              <option value="minimal">Solo Mínimas / Técnicas (Recomendado)</option>
+              <option value="strict">Rechazar Todo</option>
+              <option value="all">Aceptar Todo</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-action" id="submit-btn">💾 Guardar y Sincronizar</button>
+        </form>
+
+        <!-- BOTÓN CERRAR SESIÓN -->
+        <button class="btn-action btn-logout" onclick="logoutOpenLain()">🚪 Cerrar Sesión</button>
+      </div>
+
+      <div id="status-box" class="status-alert"></div>
     </div>
-
-    <!-- VISTA 2: FORMULARIO DE REGISTRO Y EDICIÓN DE DATOS -->
-    <div id="view-form" style="display: none;">
-      <form id="profile-form">
-        <div class="form-group">
-          <label>Nombre Completo</label>
-          <input type="text" id="name" required placeholder="Ej. Juan Pérez">
-        </div>
-
-        <div class="form-group">
-          <label>Correo Electrónico</label>
-          <input type="email" id="email" required placeholder="juan@ejemplo.com">
-        </div>
-
-        <div class="form-group">
-          <label>Teléfono</label>
-          <input type="text" id="phone" placeholder="+34 600 000 000">
-        </div>
-
-        <div class="form-group">
-          <label>Preferencia Legal de Cookies (RGPD)</label>
-          <select id="cookies">
-            <option value="minimal">Mínimas / Técnicas necesarias (Recomendado)</option>
-            <option value="strict">Rechazar Todo</option>
-            <option value="all">Aceptar Todo</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn-main" id="save-btn">💾 Guardar / Actualizar Datos</button>
-      </form>
-    </div>
-
-    <div id="status" class="status-msg status-success"></div>
   </div>
 
-  <script src="../sdk/openlain-sdk.js"></script>
-  <script>
-    function switchTab(tab) {
-      const loginView = document.getElementById('view-login');
-      const formView = document.getElementById('view-form');
-      const loginBtn = document.getElementById('tab-login-btn');
-      const regBtn = document.getElementById('tab-register-btn');
+  <footer>
+    &copy; 2026 Open Lain S.L. Protocolo de Identidad y Privacidad Descentralizada.
+  </footer>
 
-      if (tab === 'login') {
-        loginView.style.display = 'block';
-        formView.style.display = 'none';
-        loginBtn.classList.add('active');
-        regBtn.classList.remove('active');
-      } else {
-        loginView.style.display = 'none';
-        formView.style.display = 'block';
-        regBtn.classList.add('active');
-        loginBtn.classList.remove('active');
-      }
+  <script src="openlain-sdk.js"></script>
+  <script>
+    // Control de Vistas y Estados de la Interfaz
+    function showWelcomeState() {
+      document.getElementById('view-welcome').style.display = 'block';
+      document.getElementById('view-form').style.display = 'none';
+      document.getElementById('hero-headline').textContent = "Identidad 1-Click y Privacidad Soberana.";
+      document.getElementById('hero-subtext').textContent = "Navega por todo internet sin rellenar formularios interminables ni aceptar cookies manualmente. Todo seguro en tu dispositivo y nube personal.";
+      
+      // Actualizar Navbar superior
+      document.getElementById('nav-actions').innerHTML = `
+        <button class="btn-nav-outline" onclick="openLoginState()">Iniciar Sesión</button>
+        <button class="btn-nav-solid" onclick="openRegisterState()">Crear Cuenta</button>
+      `;
+      document.getElementById('status-box').style.display = 'none';
     }
 
-    // 1. INICIAR SESIÓN: Carga los datos guardados en el navegador para modificarlos
-    async function loginWithOpenLain() {
+    function openRegisterState() {
+      document.getElementById('view-welcome').style.display = 'none';
+      document.getElementById('view-form').style.display = 'block';
+      document.getElementById('form-title').textContent = "Nuevo Registro";
+      document.getElementById('form-subtitle').textContent = "Crea tu perfil soberano por primera vez.";
+      document.getElementById('submit-btn').textContent = "🚀 Crear y Sincronizar Perfil";
+      document.getElementById('profile-form').reset();
+      
+      document.getElementById('hero-headline').textContent = "Crea tu Identidad Digital Global.";
+      document.getElementById('hero-subtext').textContent = "Tus datos se cifran localmente y se sincronizan en tu navegador.";
+      
+      updateNavLoggedIn("Nuevo Registro");
+    }
+
+    async function openLoginState() {
       try {
         if (!window.OpenLainProtocol || !window.OpenLainProtocol.isAvailable()) {
-          alert("Por favor, instala o activa la extensión de Open Lain primero.");
+          alert("Por favor, asegúrate de tener la extensión de Open Lain instalada y activa.");
+          openRegisterState();
           return;
         }
 
         const data = await window.OpenLainProtocol.requestAccess();
         
-        // Rellenar formulario con los datos recuperados del PC/Nube
+        // Rellenar formulario con datos existentes
         document.getElementById('name').value = data.identity.fullName || "";
         document.getElementById('email').value = data.identity.email || "";
         document.getElementById('phone').value = data.identity.phone || "";
@@ -118,38 +367,66 @@
           document.getElementById('cookies').value = data.preferences.consent.cookies || "minimal";
         }
 
-        // Abrir la pestaña del formulario para editar
-        switchTab('register');
-        showStatus("✅ <b>¡Sesión iniciada!</b> Tus datos se han cargado. Puedes modificarlos y pulsar Guardar.");
+        // Mostrar vista de edición
+        document.getElementById('view-welcome').style.display = 'none';
+        document.getElementById('view-form').style.display = 'block';
+        document.getElementById('form-title').textContent = "Mi Panel de Control";
+        document.getElementById('form-subtitle').textContent = "Modifica tus datos o tus preferencias de privacidad en tiempo real.";
+        document.getElementById('submit-btn').textContent = "💾 Actualizar Cambios";
+
+        document.getElementById('hero-headline').textContent = "Sesión Activa en Open Lain.";
+        document.getElementById('hero-subtext').textContent = "Tu bóveda personal está conectada y sincronizada en tu navegador.";
+
+        updateNavLoggedIn("Sesión Activa");
+        showStatus("✅ ¡Sesión iniciada con éxito desde tu extensión!", "success");
       } catch (err) {
-        alert("Error al iniciar sesión: " + err.message);
+        // Si no hay datos previos, redirigir al registro
+        openRegisterState();
       }
     }
 
-    // 2. REGISTRO / GUARDAR CAMBIOS: Envía datos a la extensión
+    function updateNavLoggedIn(badgeText) {
+      document.getElementById('nav-actions').innerHTML = `
+        <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 ${badgeText}</span>
+        <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444;" onclick="logoutOpenLain()">Cerrar Sesión</button>
+      `;
+    }
+
+    // Guardar / Actualizar Datos
     document.getElementById('profile-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const updatedProfile = {
+      const profilePayload = {
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
         cookies: document.getElementById('cookies').value
       };
 
-      // Emitir mensaje hacia la extensión de Open Lain
+      // Enviar orden de guardado a la extensión (Local + Sync Nube)
       window.postMessage({
         type: "OPENLAIN_SAVE_PROFILE",
-        payload: updatedProfile
+        payload: profilePayload
       }, "*");
 
-      showStatus("✅ <b>¡Datos guardados!</b> Sincronizados localmente en tu PC y en tu nube personal.");
+      showStatus("✅ ¡Datos guardados y sincronizados en tu PC y nube personal!", "success");
+      updateNavLoggedIn("Sincronizado");
     });
 
-    function showStatus(msg) {
-      const statusDiv = document.getElementById('status');
-      statusDiv.style.display = 'block';
-      statusDiv.innerHTML = msg;
+    // Cerrar Sesión
+    function logoutOpenLain() {
+      document.getElementById('profile-form').reset();
+      showStatus("ℹ️ Sesión cerrada correctamente en este dispositivo.", "info");
+      setTimeout(() => {
+        showWelcomeState();
+      }, 1000);
+    }
+
+    function showStatus(msg, type) {
+      const box = document.getElementById('status-box');
+      box.className = "status-alert " + (type === "success" ? "alert-success" : "alert-info");
+      box.style.display = 'block';
+      box.innerHTML = msg;
     }
   </script>
 </body>
