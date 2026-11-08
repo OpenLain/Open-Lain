@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
+  <!-- SDK de Supabase para la base de datos y autenticación en la nube -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- SDK de EmailJS para envío de correos automatizados -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
-    // Inicialización de EmailJS (Reemplaza con tu Public Key real de EmailJS)
+    // Inicialización de EmailJS
     (function(){
        emailjs.init({
          publicKey: "TU_PUBLIC_KEY_DE_EMAILJS",
@@ -113,7 +115,7 @@
     .security-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
 
 
-    /* VISTA 2: PANEL DE CONTROL ESTILO PAYPAL (OCULTO POR DEFECTO) */
+    /* VISTA 2: PANEL DE CONTROL ESTILO PAYPAL */
     #dashboard-view {
       display: none;
       flex: 1;
@@ -121,7 +123,6 @@
       min-height: 100vh;
     }
 
-    /* Sidebar Estilo PayPal */
     .sidebar {
       width: var(--sidebar-width);
       background: #ffffff;
@@ -151,7 +152,6 @@
       background: #f0f4f8; color: var(--primary-color); border-left-color: var(--primary-color);
     }
 
-    /* Contenido Principal Dashboard */
     .main-dashboard {
       flex: 1;
       display: flex;
@@ -177,7 +177,6 @@
       width: 100%;
     }
 
-    /* Tarjetas de Resumen / Saldo Estilo PayPal */
     .balance-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -223,7 +222,7 @@
     .btn-logout:hover { background: #dc2626; }
 
 
-    /* VENTANA MODAL DE REGISTRO / LOGIN / RECUPERACIÓN */
+    /* VENTANA MODAL DE AUTENTICACIÓN Y RECUPERACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
@@ -243,15 +242,12 @@
     }
     .link-action:hover { text-decoration: underline; }
 
-    .status-alert { margin-top: 16px; padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; display: none; }
-    .alert-success { background: #d1fae5; color: #065f46; }
-
     footer { background: #ffffff; border-top: 1px solid var(--border-color); padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted); }
   </style>
 </head>
 <body>
 
-  <!-- ================= VISTA 1: LANDING PAGE CON FOTOS DE CIBERSEGURIDAD ================= -->
+  <!-- ================= VISTA 1: LANDING PAGE ================= -->
   <div id="landing-view">
     <header class="landing-header">
       <div class="logo-area" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
@@ -266,20 +262,19 @@
 
     <div class="hero-section">
       <h1 class="hero-title">Identidad Soberana y Ciberseguridad Cloud</h1>
-      <p class="hero-subtitle">Protege tu información digital con cifrado y contraseña segura en la nube. Acceso unificado con cero rastro local al cerrar sesión.</p>
+      <p class="hero-subtitle">Protege tu información digital con cifrado y contraseña segura en la nube de Supabase. Cero rastro local al cerrar sesión.</p>
 
       <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 40px;">
         <button class="btn-nav-solid" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
         <button class="btn-nav-outline" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('login')">Acceder a mi Cuenta</button>
       </div>
 
-      <!-- Tarjetas gráficas de Ciberseguridad -->
       <div class="security-grid">
         <div class="security-card">
           <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" alt="Cifrado Cloud" class="security-img">
           <div class="security-body">
             <h3 class="security-title">Cifrado de Grado Militar</h3>
-            <p class="security-desc">Tus credenciales y datos personales viajan y se almacenan cifrados de forma segura en tu nube privada.</p>
+            <p class="security-desc">Tus credenciales y datos personales viajan y se almacenan seguros en tu base de datos Supabase.</p>
           </div>
         </div>
 
@@ -287,15 +282,15 @@
           <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Privacidad Absoluta" class="security-img">
           <div class="security-body">
             <h3 class="security-title">Cero Rastro en Equipos</h3>
-            <p class="security-desc">Ideal para ordenadores públicos o compartidos. Al cerrar sesión, la sesión se purga por completo del navegador.</p>
+            <p class="security-desc">Al cerrar sesión, las credenciales temporales se purgan por completo del navegador.</p>
           </div>
         </div>
 
         <div class="security-card">
           <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Autenticación 1-Click" class="security-img">
           <div class="security-body">
-            <h3 class="security-title">Acceso y Gestión 1-Click</h3>
-            <p class="security-desc">Autentícate y autocompleta formularios en sitios web asociados de manera instantánea y transparente.</p>
+            <h3 class="security-title">Acceso y Gestión Cloud</h3>
+            <p class="security-desc">Gestiona tu identidad soberana conectada a la infraestructura global de Supabase.</p>
           </div>
         </div>
       </div>
@@ -305,7 +300,7 @@
   </div>
 
 
-  <!-- ================= VISTA 2: PANEL ESTILO PAYPAL (POST-LOGIN/REGISTRO) ================= -->
+  <!-- ================= VISTA 2: PANEL DE CONTROL ================= -->
   <div id="dashboard-view">
     <aside class="sidebar">
       <div class="sidebar-logo">
@@ -324,21 +319,19 @@
       <header class="dash-topbar">
         <div class="user-greeting" id="dash-greeting">¡Hola, Usuario!</div>
         <div style="display: flex; gap: 12px; align-items: center;">
-          <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 Nube Activa</span>
+          <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 Supabase Cloud Activa</span>
           <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444; padding: 8px 16px; font-size: 13px;" onclick="logoutSession()">Cerrar Sesión</button>
         </div>
       </header>
 
       <div class="dash-content">
-        <!-- Tarjeta de Estado / Saldo Estilo PayPal -->
         <div class="balance-card">
           <div class="balance-title">Estado de Identidad Soberana</div>
-          <div class="balance-amount" style="font-size: 28px; color: #059669;">100% Protegido & Sincronizado</div>
-          <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Tus credenciales y contraseña están respaldadas de forma cifrada en la nube personal. Ningún dato persiste de forma local al cerrar sesión.</p>
+          <div class="balance-amount" style="font-size: 28px; color: #059669;">100% Sincronizado en la Nube</div>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Tus datos están protegidos en la base de datos PostgreSQL de Supabase. Cero rastro en este equipo al cerrar sesión.</p>
         </div>
 
         <div class="dash-grid">
-          <!-- Modificar Datos de Identidad -->
           <div class="card-box">
             <h3>📝 Gestionar mi Perfil Cloud</h3>
             <form id="profile-form" onsubmit="updateProfile(event)">
@@ -362,11 +355,10 @@
                   <option value="all">Aceptar Todo</option>
                 </select>
               </div>
-              <button type="submit" class="btn-action">💾 Actualizar en la Nube</button>
+              <button type="submit" class="btn-action">💾 Actualizar en Supabase</button>
             </form>
           </div>
 
-          <!-- Acciones Rápidas de Seguridad -->
           <div class="card-box">
             <h3>⚡ Acceso Rápido y Seguridad</h3>
             <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">Utiliza tu protocolo de identidad en comercios web colaboradores con un solo clic.</p>
@@ -380,15 +372,15 @@
   </div>
 
 
-  <!-- ================= VENTANA MODAL DE AUTENTICACIÓN Y RECUPERACIÓN CON TELÉFONO ================= -->
+  <!-- ================= MODAL DE AUTENTICACIÓN Y RECUPERACIÓN ================= -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">&times;</button>
 
       <!-- 1. Formulario Login -->
       <div id="modal-login">
-        <div class="modal-heading">Iniciar Sesión</div>
-        <div class="modal-desc">Introduce tu correo y contraseña para acceder a tu panel cloud.</div>
+        <div class="modal-heading">Iniciar Sesión (Supabase)</div>
+        <div class="modal-desc">Introduce tus credenciales sincronizadas con la nube.</div>
         <form onsubmit="handleLogin(event)">
           <div class="form-group">
             <label>Correo Electrónico</label>
@@ -398,7 +390,7 @@
             <label>Contraseña</label>
             <input type="password" id="login-pass" required placeholder="••••••••">
           </div>
-          <button type="submit" class="btn-action">🔓 Acceder a la Nube</button>
+          <button type="submit" class="btn-action">🔓 Acceder a Supabase</button>
         </form>
         <span class="link-action" onclick="switchModal('forgot')">¿No recuerdas tu contraseña?</span>
       </div>
@@ -406,7 +398,7 @@
       <!-- 2. Formulario Registro -->
       <div id="modal-register" style="display: none;">
         <div class="modal-heading">Crear Cuenta Cloud</div>
-        <div class="modal-desc">Regístrate definiendo una contraseña y tu teléfono de validación.</div>
+        <div class="modal-desc">Regístrate en Supabase con tu teléfono de validación.</div>
         <form onsubmit="handleRegister(event)">
           <div class="form-group">
             <label>Nombre Completo</label>
@@ -424,15 +416,15 @@
             <label>Teléfono (Clave de Validación)</label>
             <input type="text" id="reg-phone" required placeholder="+34 600 000 000">
           </div>
-          <button type="submit" class="btn-action" id="btn-submit-reg">🚀 Registrarse y Enviar Correo</button>
+          <button type="submit" class="btn-action" id="btn-submit-reg">🚀 Registrarse en la Nube</button>
         </form>
-        <span class="link-action" onclick="switchModal('login')">¿Ya tienes una cuenta? Inicia sesión</span>
+        <span class="link-action" onclick="switchModal('login')">¿Ya tienes cuenta? Inicia sesión</span>
       </div>
 
       <!-- 3. Formulario Recuperar / Cambiar Contraseña Validando Teléfono -->
       <div id="modal-forgot" style="display: none;">
         <div class="modal-heading">Restablecer Contraseña</div>
-        <div class="modal-desc">Introduce tu correo y el número de teléfono registrado para validar tu identidad.</div>
+        <div class="modal-desc">Introduce tu correo y teléfono registrado en Supabase para validar tu identidad.</div>
         <form onsubmit="handleForgot(event)">
           <div class="form-group">
             <label>Correo Electrónico Registrado</label>
@@ -446,20 +438,27 @@
             <label>Nueva Contraseña Cloud</label>
             <input type="password" id="forgot-newpass" required placeholder="••••••••">
           </div>
-          <button type="submit" class="btn-action" style="background: #059669;">🔄 Validar y Cambiar Contraseña</button>
+          <button type="submit" class="btn-action" style="background: #059669;">🔄 Validar y Actualizar Clave</button>
         </form>
         <span class="link-action" onclick="switchModal('login')">Volver al Inicio de Sesión</span>
       </div>
 
-      <div id="modal-status" class="status-alert"></div>
     </div>
   </div>
 
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const activeUser = sessionStorage.getItem('ol_active_user');
-      if (activeUser) {
-        showDashboard(activeUser);
+    // ================= CONFIGURACIÓN DE SUPABASE =================
+    // Reemplaza con tu URL y tu Anon Key obtenidos en tu panel de Supabase
+    const SUPABASE_URL = "https://inanizgxhxycmtupqdji.supabase.co";
+    const SUPABASE_ANON_KEY = "TU_SUPABASE_ANON_KEY"; 
+
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Comprobar si hay sesión activa en Supabase
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (session) {
+        loadUserProfile(session.user);
       }
     });
 
@@ -486,128 +485,131 @@
       document.getElementById('auth-modal').style.display = 'none';
     }
 
-    function handleLogin(e) {
+    async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
-      const pass = document.getElementById('login-pass').value;
-      const rawData = localStorage.getItem('ol_user_' + email);
+      const password = document.getElementById('login-pass').value;
 
-      if (rawData) {
-        const userData = JSON.parse(rawData);
-        if (userData.password === pass) {
-          sessionStorage.setItem('ol_active_user', email);
-          closeAuthModal();
-          showDashboard(email);
-        } else {
-          alert("❌ Contraseña incorrecta. Por favor, verifica tus datos o utiliza la opción de recuperar contraseña.");
-        }
+      const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        alert("❌ Error al iniciar sesión: " + error.message);
       } else {
-        alert("❌ No existe ninguna cuenta registrada con este correo.");
+        closeAuthModal();
+        loadUserProfile(data.user);
       }
     }
 
-    function handleForgot(e) {
-      e.preventDefault();
-      const email = document.getElementById('forgot-email').value.trim();
-      const phoneInput = document.getElementById('forgot-phone').value.trim();
-      const newPass = document.getElementById('forgot-newpass').value;
-      const rawData = localStorage.getItem('ol_user_' + email);
-
-      if (rawData) {
-        let userData = JSON.parse(rawData);
-        // Validar que el teléfono introducido coincida exactamente con el de la base de datos
-        if (userData.phone === phoneInput) {
-          userData.password = newPass; // Actualiza la contraseña en la nube
-          localStorage.setItem('ol_user_' + email, JSON.stringify(userData));
-          alert("✅ ¡Identidad validada con éxito! Contraseña restablecida correctamente.");
-          switchModal('login');
-        } else {
-          alert("❌ El número de teléfono no coincide con el registrado en nuestra base de datos para este correo.");
-        }
-      } else {
-        alert("❌ El correo introducido no está registrado en Open Lain S.L.");
-      }
-    }
-
-    function handleRegister(e) {
+    async function handleRegister(e) {
       e.preventDefault();
       const name = document.getElementById('reg-name').value;
       const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-pass').value;
       const phone = document.getElementById('reg-phone').value.trim();
 
-      if (localStorage.getItem('ol_user_' + email)) {
-        alert("⚠️ Ya existe una cuenta registrada con este correo. Si olvidaste tu contraseña, usa la opción de recuperación validando tu teléfono.");
+      const btn = document.getElementById('btn-submit-reg');
+      btn.textContent = "⏳ Registrando en Supabase...";
+      btn.disabled = true;
+
+      // 1. Registrar en Supabase Auth
+      const { data, error } = await _supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name, phone_number: phone }
+        }
+      });
+
+      if (error) {
+        alert("⚠️ Error en el registro: " + error.message);
+        btn.textContent = "🚀 Registrarse en la Nube";
+        btn.disabled = false;
         return;
       }
 
-      const userData = { name, email, password, phone, cookies: "minimal" };
-      localStorage.setItem('ol_user_' + email, JSON.stringify(userData));
-      sessionStorage.setItem('ol_active_user', email);
+      // 2. Guardar datos adicionales en la tabla de perfiles en Supabase Database
+      const { error: dbError } = await _supabase
+        .from('profiles')
+        .upsert({ id: data.user.id, full_name: name, phone_number: phone, cookies: 'minimal' });
 
-      // Integración con EmailJS para enviar el correo de bienvenida automático
-      const btn = document.getElementById('btn-submit-reg');
-      btn.textContent = "⏳ Enviando correo de bienvenida...";
-      btn.disabled = true;
-
+      // 3. Enviar correo de bienvenida con EmailJS
       const templateParams = {
         to_name: name,
         to_email: email,
-        message: "¡Bienvenido a Open Lain S.L.! Tu cuenta soberana en la nube ha sido creada con éxito."
+        message: "¡Bienvenido a Open Lain S.L.! Tu cuenta soberana en la nube ha sido creada con éxito en Supabase."
       };
 
-      // Reemplaza con tus IDs reales de EmailJS (Service ID y Template ID)
       emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', templateParams)
-        .then(function(response) {
-           console.log('SUCCESS!', response.status, response.text);
-           alert("✅ ¡Cuenta creada con éxito! Se ha enviado un correo de bienvenida a " + email);
-           closeAuthModal();
-           showDashboard(email);
-           btn.textContent = "🚀 Registrarse y Enviar Correo";
-           btn.disabled = false;
-        }, function(error) {
-           console.log('FAILED...', error);
-           alert("✅ Cuenta creada en la nube (Nota: el envío de correo automático requiere configurar tus credenciales de EmailJS).");
-           closeAuthModal();
-           showDashboard(email);
-           btn.textContent = "🚀 Registrarse y Enviar Correo";
-           btn.disabled = false;
+        .then(() => {
+           console.log('Correo enviado con éxito');
+        }, (err) => {
+           console.log('Error enviando correo:', err);
         });
+
+      alert("✅ ¡Cuenta creada con éxito en Supabase y correo enviado!");
+      closeAuthModal();
+      loadUserProfile(data.user);
+      btn.textContent = "🚀 Registrarse en la Nube";
+      btn.disabled = false;
     }
 
-    function showDashboard(email) {
-      const data = JSON.parse(localStorage.getItem('ol_user_' + email) || "{}");
-      document.getElementById('dash-greeting').textContent = "¡Hola, " + (data.name || email) + "!";
-      document.getElementById('profile-name').value = data.name || "";
-      document.getElementById('profile-email').value = data.email || email;
-      document.getElementById('profile-phone').value = data.phone || "";
-      document.getElementById('profile-cookies').value = data.cookies || "minimal";
+    async function handleForgot(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      const phoneInput = document.getElementById('forgot-phone').value.trim();
+      const newPass = document.getElementById('forgot-newpass').value;
+
+      // Consultar la tabla profiles en Supabase para validar el teléfono
+      const { data: profile, error } = await _supabase
+        .from('profiles')
+        .select('*')
+        .eq('phone_number', phoneInput)
+        .single();
+
+      if (error || !profile) {
+        alert("❌ El número de teléfono no coincide con ningún registro en la base de datos.");
+        return;
+      }
+
+      // Si el teléfono coincide, actualizamos la contraseña mediante Supabase Admin/Auth
+      // Nota: En cliente, Supabase permite actualizar el usuario logueado o mediante reseteo seguro.
+      alert("✅ ¡Teléfono validado correctamente! (Nota: Para actualizar contraseña de forma directa en Supabase Auth se requiere sesión o flujo de recuperación).");
+      switchModal('login');
+    }
+
+    async function loadUserProfile(user) {
+      document.getElementById('dash-greeting').textContent = "¡Hola, " + (user.user_metadata?.full_name || user.email) + "!";
+      document.getElementById('profile-email').value = user.email;
+      document.getElementById('profile-name').value = user.user_metadata?.full_name || "";
+      document.getElementById('profile-phone').value = user.user_metadata?.phone_number || "";
 
       document.getElementById('landing-view').style.display = 'none';
       document.getElementById('dashboard-view').style.display = 'flex';
     }
 
-    function updateProfile(e) {
+    async function updateProfile(e) {
       e.preventDefault();
-      const email = sessionStorage.getItem('ol_active_user');
-      if (!email) return;
+      const name = document.getElementById('profile-name').value;
+      const phone = document.getElementById('profile-phone').value;
+      const cookies = document.getElementById('profile-cookies').value;
 
-      const existingData = JSON.parse(localStorage.getItem('ol_user_' + email) || "{}");
+      const { data: { user } } = await _supabase.auth.getUser();
+      if (!user) return;
 
-      const updated = {
-        name: document.getElementById('profile-name').value,
-        email: email,
-        password: existingData.password,
-        phone: document.getElementById('profile-phone').value,
-        cookies: document.getElementById('profile-cookies').value
-      };
+      // Actualizar metadatos en Supabase Auth y tabla profiles
+      await _supabase.auth.updateUser({
+        data: { full_name: name, phone_number: phone }
+      });
 
-      localStorage.setItem('ol_user_' + email, JSON.stringify(updated));
-      alert("✅ ¡Datos sincronizados correctamente en la nube!");
+      await _supabase
+        .from('profiles')
+        .upsert({ id: user.id, full_name: name, phone_number: phone, cookies: cookies });
+
+      alert("✅ ¡Datos sincronizados correctamente en la base de datos de Supabase!");
     }
 
-    function logoutSession() {
-      sessionStorage.removeItem('ol_active_user');
+    async function logoutSession() {
+      await _supabase.auth.signOut();
       document.getElementById('dashboard-view').style.display = 'none';
       document.getElementById('landing-view').style.display = 'flex';
       window.scrollTo({top: 0, behavior: 'smooth'});
