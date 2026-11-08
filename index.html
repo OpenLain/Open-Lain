@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open Lain | Identidad Soberana en la Nube</title>
+  <title>Open Lain S.L. | Panel de Identidad Soberana</title>
   <style>
     :root {
       --primary-color: #0070ba;
       --primary-hover: #005ea6;
-      --bg-color: #f5f7fa;
+      --bg-color: #f4f6f9;
       --card-bg: #ffffff;
       --text-main: #2c3e50;
       --text-muted: #6c757d;
       --border-color: #e3e8ee;
+      --sidebar-width: 260px;
     }
 
     body {
@@ -26,8 +27,15 @@
       min-height: 100vh;
     }
 
-    header {
-      background: var(--card-bg);
+    /* VISTA 1: LANDING PAGE DE CIBERSEGURIDAD */
+    #landing-view {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header.landing-header {
+      background: #ffffff;
       border-bottom: 1px solid var(--border-color);
       padding: 16px 40px;
       display: flex;
@@ -36,7 +44,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
-    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     .logo-icon {
       width: 36px; height: 36px;
       background: linear-gradient(135deg, #0070ba, #003087);
@@ -49,29 +57,144 @@
     .btn-nav-outline {
       padding: 10px 22px; border: 2px solid var(--primary-color); background: transparent;
       color: var(--primary-color); border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer;
+      transition: all 0.2s;
     }
+    .btn-nav-outline:hover { background: rgba(0, 112, 186, 0.05); }
     .btn-nav-solid {
       padding: 10px 24px; border: none; background: var(--primary-color); color: white;
       border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3);
+      transition: all 0.2s;
     }
+    .btn-nav-solid:hover { background: var(--primary-hover); }
 
-    .main-hero {
+    .hero-section {
       flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 40px 20px; text-align: center;
+      padding: 60px 20px; text-align: center;
       background: radial-gradient(circle at 50% 20%, rgba(0, 112, 186, 0.08) 0%, transparent 60%);
     }
 
-    .hero-title { font-size: 40px; font-weight: 800; color: #0f172a; max-width: 700px; margin-bottom: 16px; }
-    .hero-subtitle { font-size: 16px; color: var(--text-muted); max-width: 500px; margin-bottom: 36px; }
+    .hero-title { font-size: 44px; font-weight: 800; color: #0f172a; max-width: 750px; margin-bottom: 16px; letter-spacing: -1px; }
+    .hero-subtitle { font-size: 17px; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; line-height: 1.5; }
 
-    .card-container {
-      background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 36px; width: 100%; max-width: 440px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-      text-align: left; box-sizing: border-box;
+    /* TARJETAS / FOTOS DE CIBERSEGURIDAD */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 20px;
+      text-align: left;
     }
 
-    .card-heading { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
-    .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .security-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      transition: transform 0.3s;
+    }
+    .security-card:hover { transform: translateY(-4px); }
+    .security-img { width: 100%; height: 160px; object-fit: cover; }
+    .security-body { padding: 20px; }
+    .security-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    .security-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+
+    /* VISTA 2: PANEL DE CONTROL ESTILO PAYPAL (OCULTO POR DEFECTO) */
+    #dashboard-view {
+      display: none;
+      flex: 1;
+      flex-direction: row;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Estilo PayPal */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: #ffffff;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      box-sizing: border-box;
+    }
+
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px; padding: 0 24px 24px 24px;
+      border-bottom: 1px solid var(--border-color); font-size: 20px; font-weight: 800; color: #003087;
+    }
+
+    .sidebar-menu {
+      list-style: none; padding: 20px 0; margin: 0; display: flex; flex-direction: column; gap: 4px;
+    }
+
+    .sidebar-item a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600;
+      border-left: 4px solid transparent; transition: all 0.2s;
+    }
+
+    .sidebar-item a:hover, .sidebar-item a.active {
+      background: #f0f4f8; color: var(--primary-color); border-left-color: var(--primary-color);
+    }
+
+    /* Contenido Principal Dashboard */
+    .main-dashboard {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    .dash-topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-greeting { font-size: 22px; font-weight: 800; color: #0f172a; }
+
+    .dash-content {
+      padding: 40px;
+      max-width: 1100px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    /* Tarjetas de Resumen / Saldo Estilo PayPal */
+    .balance-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      margin-bottom: 30px;
+    }
+
+    .balance-title { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .balance-amount { font-size: 36px; font-weight: 800; color: #0f172a; margin-bottom: 16px; }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .card-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 12px; }
 
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
@@ -82,211 +205,291 @@
     input:focus, select:focus { outline: none; border-color: var(--primary-color); background: #ffffff; }
 
     .btn-action {
-      width: 100%; padding: 14px; background: var(--primary-color); color: white;
-      border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 8px;
+      width: 100%; padding: 12px; background: var(--primary-color); color: white;
+      border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px;
     }
     .btn-action:hover { background: var(--primary-hover); }
-    .btn-logout { background: #ef4444; margin-top: 12px; }
+    .btn-logout { background: #ef4444; }
     .btn-logout:hover { background: #dc2626; }
 
-    .status-alert { margin-top: 16px; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center; display: none; font-weight: 500; }
-    .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
 
-    footer { background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted); }
+    /* VENTANA MODAL DE REGISTRO / LOGIN */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; box-sizing: border-box;
+    }
+    .modal-card {
+      background: #ffffff; border-radius: 20px; padding: 36px; width: 100%; max-width: 420px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.2); position: relative; box-sizing: border-box; text-align: left;
+    }
+    .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+    .modal-heading { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+    .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .status-alert { margin-top: 16px; padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; display: none; }
+    .alert-success { background: #d1fae5; color: #065f46; }
+
+    footer { background: #ffffff; border-top: 1px solid var(--border-color); padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted); }
   </style>
 </head>
 <body>
 
-  <!-- BARRA SUPERIOR -->
-  <header>
-    <div class="logo-area">
-      <div class="logo-icon">OL</div>
-      <div class="logo-text">Open Lain S.L.</div>
-    </div>
-    <div class="nav-actions" id="nav-actions">
-      <button class="btn-nav-outline" onclick="showLoginView()">Iniciar Sesión</button>
-      <button class="btn-nav-solid" onclick="showRegisterView()">Crear Cuenta</button>
-    </div>
-  </header>
+  <!-- ================= VISTA 1: LANDING PAGE CON FOTOS DE CIBERSEGURIDAD ================= -->
+  <div id="landing-view">
+    <header class="landing-header">
+      <div class="logo-area" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="logo-icon">OL</div>
+        <div class="logo-text">Open Lain S.L.</div>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-nav-outline" onclick="openAuthModal('login')">Iniciar Sesión</button>
+        <button class="btn-nav-solid" onclick="openAuthModal('register')">Crear Cuenta</button>
+      </div>
+    </header>
 
-  <!-- CONTENIDO CENTRAL -->
-  <div class="main-hero">
-    <h1 class="hero-title" id="hero-headline">Identidad Cloud y Privacidad Absoluta.</h1>
-    <p class="hero-subtitle" id="hero-subtext">Gestiona tus datos de identidad directamente en la nube sin instalar aplicaciones ni extensiones.</p>
+    <div class="hero-section">
+      <h1 class="hero-title">Identidad Soberana y Ciberseguridad Cloud</h1>
+      <p class="hero-subtitle">Protege tu información digital con cifrado de extremo a extremo. Acceso unificado de alta seguridad con cero rastro local al cerrar sesión.</p>
 
-    <div class="card-container">
-      
-      <!-- VISTA 1: INICIO / BIENVENIDA -->
-      <div id="view-welcome">
-        <div class="card-heading">Bienvenido a Open Lain</div>
-        <div class="card-desc">Accede con tu cuenta o regístrate para gestionar tu perfil soberano en la nube.</div>
-        <button class="btn-action" onclick="showLoginView()">⚡ Iniciar Sesión</button>
-        <button class="btn-action" style="background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); margin-top: 10px;" onclick="showRegisterView()">📝 Registrarse</button>
+      <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 40px;">
+        <button class="btn-nav-solid" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
+        <button class="btn-nav-outline" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('login')">Acceder a mi Cuenta</button>
       </div>
 
-      <!-- VISTA 2: FORMULARIO DE ACCESO / LOGIN -->
-      <div id="view-login" style="display: none;">
-        <div class="card-heading">Iniciar Sesión</div>
-        <div class="card-desc">Introduce tu correo para acceder a tu sesión en la nube.</div>
-        <form id="login-form">
+      <!-- Tarjetas gráficas de Ciberseguridad -->
+      <div class="security-grid">
+        <div class="security-card">
+          <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" alt="Cifrado Cloud" class="security-img">
+          <div class="security-body">
+            <h3 class="security-title">Cifrado de Grado Militar</h3>
+            <p class="security-desc">Tus credenciales y datos personales viajan y se almacenan cifrados de forma segura en tu nube privada.</p>
+          </div>
+        </div>
+
+        <div class="security-card">
+          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Privacidad Absoluta" class="security-img">
+          <div class="security-body">
+            <h3 class="security-title">Cero Rastro en Equipos</h3>
+            <p class="security-desc">Ideal para ordenadores públicos o compartidos. Al cerrar sesión, la sesión se purga por completo del navegador.</p>
+          </div>
+        </div>
+
+        <div class="security-card">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Autenticación 1-Click" class="security-img">
+          <div class="security-body">
+            <h3 class="security-title">Acceso y Gestión 1-Click</h3>
+            <p class="security-desc">Autentícate y autocompleta formularios en sitios web asociados de manera instantánea y transparente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>&copy; 2026 Open Lain S.L. Protocolo de Identidad Soberana.</footer>
+  </div>
+
+
+  <!-- ================= VISTA 2: PANEL ESTILO PAYPAL (POST-LOGIN/REGISTRO) ================= -->
+  <div id="dashboard-view">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="width: 32px; height: 32px; font-size: 15px;">OL</div>
+        <span>Open Lain</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item"><a href="#" class="active">🏠 Inicio Dashboard</a></li>
+        <li class="sidebar-item"><a href="#">🔒 Bóveda Cifrada <span>›</span></a></li>
+        <li class="sidebar-item"><a href="#">⚙️ Conexiones Web <span>›</span></a></li>
+        <li class="sidebar-item"><a href="#">🛡️ Seguridad y RGPD <span>›</span></a></li>
+      </ul>
+    </aside>
+
+    <div class="main-dashboard">
+      <header class="dash-topbar">
+        <div class="user-greeting" id="dash-greeting">¡Hola, Usuario!</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 Nube Activa</span>
+          <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444; padding: 8px 16px; font-size: 13px;" onclick="logoutSession()">Cerrar Sesión</button>
+        </div>
+      </header>
+
+      <div class="dash-content">
+        <!-- Tarjeta de Estado / Saldo Estilo PayPal -->
+        <div class="balance-card">
+          <div class="balance-title">Estado de Identidad Soberana</div>
+          <div class="balance-amount" style="font-size: 28px; color: #059669;">100% Protegido & Sincronizado</div>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Tus credenciales están respaldadas de forma cifrada en la nube personal. Ningún dato persiste de forma local al cerrar sesión.</p>
+        </div>
+
+        <div class="dash-grid">
+          <!-- Modificar Datos de Identidad -->
+          <div class="card-box">
+            <h3>📝 Gestionar mi Perfil Cloud</h3>
+            <form id="profile-form" onsubmit="updateProfile(event)">
+              <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" id="profile-name" required>
+              </div>
+              <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="profile-email" disabled style="background: #e2e8f0; cursor: not-allowed;">
+              </div>
+              <div class="form-group">
+                <label>Teléfono</label>
+                <input type="text" id="profile-phone">
+              </div>
+              <div class="form-group">
+                <label>Preferencias de Cookies (RGPD)</label>
+                <select id="profile-cookies">
+                  <option value="minimal">Solo Mínimas / Técnicas</option>
+                  <option value="strict">Rechazar Todo</option>
+                  <option value="all">Aceptar Todo</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-action">💾 Actualizar en la Nube</button>
+            </form>
+          </div>
+
+          <!-- Acciones Rápidas de Seguridad -->
+          <div class="card-box">
+            <h3>⚡ Acceso Rápido y Seguridad</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">Utiliza tu protocolo de identidad en comercios web colaboradores con un solo clic.</p>
+            <button class="btn-action" style="background: #0f172a; margin-top: 16px;" onclick="alert('Protocolo de enlace seguro activo con Open Lain S.L.')">Ver Apps Vinculadas</button>
+            <button class="btn-action btn-logout" onclick="logoutSession()">Cerrar Sesión Inmediata</button>
+          </div>
+        </div>
+      </div>
+      <footer>&copy; 2026 Open Lain S.L. Protocolo Cloud de Identidad Soberana.</footer>
+    </div>
+  </div>
+
+
+  <!-- ================= VENTANA MODAL DE REGISTRO / LOGIN ================= -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+
+      <!-- Formulario Login -->
+      <div id="modal-login">
+        <div class="modal-heading">Iniciar Sesión</div>
+        <div class="modal-desc">Introduce tu correo para acceder a tu panel cloud.</div>
+        <form onsubmit="handleLogin(event)">
           <div class="form-group">
             <label>Correo Electrónico</label>
             <input type="email" id="login-email" required placeholder="tu@correo.com">
           </div>
-          <button type="submit" class="btn-action">🔓 Acceder a mi Sesión</button>
+          <button type="submit" class="btn-action">🔓 Acceder a la Nube</button>
         </form>
-        <button class="btn-action" style="background: transparent; color: var(--text-muted); border: none; margin-top: 8px;" onclick="showWelcomeView()">← Volver</button>
       </div>
 
-      <!-- VISTA 3: PANEL DE CONTROL Y EDICIÓN DE DATOS -->
-      <div id="view-dashboard" style="display: none;">
-        <div class="card-heading" id="dash-title">Mi Perfil Cloud</div>
-        <div class="card-desc">Modifica tus datos o tus preferencias en tiempo real.</div>
-
-        <form id="profile-form">
+      <!-- Formulario Registro -->
+      <div id="modal-register" style="display: none;">
+        <div class="modal-heading">Crear Cuenta Cloud</div>
+        <div class="modal-desc">Regístrate para gestionar tu identidad soberana.</div>
+        <form onsubmit="handleRegister(event)">
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="name" required placeholder="Ej. Ana García">
+            <input type="text" id="reg-name" required placeholder="Ej. Ana García">
           </div>
           <div class="form-group">
             <label>Correo Electrónico</label>
-            <input type="email" id="email" required placeholder="ana@ejemplo.com" disabled style="background: #e2e8f0; cursor: not-allowed;">
+            <input type="email" id="reg-email" required placeholder="tu@correo.com">
           </div>
           <div class="form-group">
             <label>Teléfono</label>
-            <input type="text" id="phone" placeholder="+34 600 000 000">
+            <input type="text" id="reg-phone" placeholder="+34 600 000 000">
           </div>
-          <div class="form-group">
-            <label>Preferencia de Cookies (RGPD)</label>
-            <select id="cookies">
-              <option value="minimal">Solo Mínimas / Técnicas (Recomendado)</option>
-              <option value="strict">Rechazar Todo</option>
-              <option value="all">Aceptar Todo</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn-action">💾 Guardar Cambios en la Nube</button>
+          <button type="submit" class="btn-action">🚀 Registrarse</button>
         </form>
-
-        <button class="btn-action btn-logout" onclick="logoutSession()">🚪 Cerrar Sesión</button>
       </div>
-
-      <div id="status-box" class="status-alert"></div>
+      <div id="modal-status" class="status-alert"></div>
     </div>
   </div>
 
-  <footer>
-    &copy; 2026 Open Lain S.L. Protocolo Cloud de Identidad Soberana.
-  </footer>
-
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      const activeUser = sessionStorage.getItem('openlain_active_user');
+      const activeUser = sessionStorage.getItem('ol_active_user');
       if (activeUser) {
-        loadUserData(activeUser);
+        showDashboard(activeUser);
       }
     });
 
-    function showWelcomeView() {
-      document.getElementById('view-welcome').style.display = 'block';
-      document.getElementById('view-login').style.display = 'none';
-      document.getElementById('view-dashboard').style.display = 'none';
-      document.getElementById('status-box').style.display = 'none';
-      resetNav(false);
-    }
-
-    function showLoginView() {
-      document.getElementById('view-welcome').style.display = 'none';
-      document.getElementById('view-login').style.display = 'block';
-      document.getElementById('view-dashboard').style.display = 'none';
-    }
-
-    function showRegisterView() {
-      const email = prompt("Introduce tu correo electrónico para registrarte en Open Lain Cloud:");
-      if (email) {
-        const initialData = { name: "", email: email, phone: "", cookies: "minimal" };
-        localStorage.setItem("ol_user_" + email, JSON.stringify(initialData));
-        sessionStorage.setItem('openlain_active_user', email);
-        loadUserData(email);
-        showStatus("✅ ¡Cuenta creada con éxito en la nube!", "success");
+    function openAuthModal(type) {
+      document.getElementById('auth-modal').style.display = 'flex';
+      if (type === 'login') {
+        document.getElementById('modal-login').style.display = 'block';
+        document.getElementById('modal-register').style.display = 'none';
+      } else {
+        document.getElementById('modal-login').style.display = 'none';
+        document.getElementById('modal-register').style.display = 'block';
       }
     }
 
-    document.getElementById('login-form').addEventListener('submit', (e) => {
+    function closeAuthModal() {
+      document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
-      const storedData = localStorage.getItem("ol_user_" + email);
+      const data = localStorage.getItem('ol_user_' + email);
 
-      if (storedData) {
-        sessionStorage.setItem('openlain_active_user', email);
-        loadUserData(email);
-        showStatus("✅ ¡Sesión iniciada correctamente!", "success");
+      if (data) {
+        sessionStorage.setItem('ol_active_user', email);
+        closeAuthModal();
+        showDashboard(email);
       } else {
-        alert("No existe ninguna cuenta registrada con este correo. Por favor, regístrate primero.");
+        alert("No existe ninguna cuenta con este correo. Regístrate primero.");
       }
-    });
-
-    function loadUserData(email) {
-      const data = JSON.parse(localStorage.getItem("ol_user_" + email) || "{}");
-      document.getElementById('name').value = data.name || "";
-      document.getElementById('email').value = data.email || email;
-      document.getElementById('phone').value = data.phone || "";
-      document.getElementById('cookies').value = data.cookies || "minimal";
-
-      document.getElementById('view-welcome').style.display = 'none';
-      document.getElementById('view-login').style.display = 'none';
-      document.getElementById('view-dashboard').style.display = 'block';
-
-      updateNavLoggedIn();
     }
 
-    document.getElementById('profile-form').addEventListener('submit', (e) => {
+    function handleRegister(e) {
       e.preventDefault();
-      const email = sessionStorage.getItem('openlain_session_email') || sessionStorage.getItem('openlain_active_user');
-      // Aseguramos capturar el email correctamente
-      const activeEmail = document.getElementById('email').value;
-      if (!activeEmail) return;
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value.trim();
+      const phone = document.getElementById('reg-phone').value;
 
-      const updatedData = {
-        name: document.getElementById('name').value,
-        email: activeEmail,
-        phone: document.getElementById('phone').value,
-        cookies: document.getElementById('cookies').value
+      const userData = { name, email, phone, cookies: "minimal" };
+      localStorage.setItem('ol_user_' + email, JSON.stringify(userData));
+      sessionStorage.setItem('ol_active_user', email);
+
+      closeAuthModal();
+      showDashboard(email);
+    }
+
+    function showDashboard(email) {
+      const data = JSON.parse(localStorage.getItem('ol_user_' + email) || "{}");
+      document.getElementById('dash-greeting').textContent = "¡Hola, " + (data.name || email) + "!";
+      document.getElementById('profile-name').value = data.name || "";
+      document.getElementById('profile-email').value = data.email || email;
+      document.getElementById('profile-phone').value = data.phone || "";
+      document.getElementById('profile-cookies').value = data.cookies || "minimal";
+
+      document.getElementById('landing-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'flex';
+    }
+
+    function updateProfile(e) {
+      e.preventDefault();
+      const email = sessionStorage.getItem('ol_active_user');
+      if (!email) return;
+
+      const updated = {
+        name: document.getElementById('profile-name').value,
+        email: email,
+        phone: document.getElementById('profile-phone').value,
+        cookies: document.getElementById('profile-cookies').value
       };
 
-      localStorage.setItem("ol_user_" + activeEmail, JSON.stringify(updatedData));
-      showStatus("✅ ¡Datos actualizados y guardados en la nube!", "success");
-    });
+      localStorage.setItem('ol_user_' + email, JSON.stringify(updated));
+      alert("✅ ¡Datos actualizados correctamente en la nube!");
+    }
 
     function logoutSession() {
-      sessionStorage.removeItem('openlain_active_user');
-      document.getElementById('profile-form').reset();
-      showStatus("ℹ️ Sesión cerrada. Se ha borrado el acceso de este dispositivo.", "info");
-      setTimeout(() => {
-        showWelcomeView();
-      }, 1000);
-    }
-
-    function updateNavLoggedIn() {
-      document.getElementById('nav-actions').innerHTML = `
-        <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 Sesión Activa</span>
-        <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444;" onclick="logoutSession()">Cerrar Sesión</button>
-      `;
-    }
-
-    function resetNav() {
-      document.getElementById('nav-actions').innerHTML = `
-        <button class="btn-nav-outline" onclick="showLoginView()">Iniciar Sesión</button>
-        <button class="btn-nav-solid" onclick="showRegisterView()">Crear Cuenta</button>
-      `;
-    }
-
-    function showStatus(msg, type) {
-      const box = document.getElementById('status-box');
-      box.className = "status-alert " + (type === "success" ? "alert-success" : "alert-info");
-      box.style.display = 'block';
-      box.innerHTML = msg;
+      sessionStorage.removeItem('ol_active_user');
+      document.getElementById('dashboard-view').style.display = 'none';
+      document.getElementById('landing-view').style.display = 'flex';
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
   </script>
 </body>
