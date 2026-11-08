@@ -223,7 +223,7 @@
     .btn-logout:hover { background: #dc2626; }
 
 
-    /* VENTANA MODAL DE REGISTRO / LOGIN CON CONTRASEÑA */
+    /* VENTANA MODAL DE REGISTRO / LOGIN / RECUPERACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
@@ -236,6 +236,12 @@
     .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
     .modal-heading { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
     .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .link-action {
+      display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--primary-color);
+      text-decoration: none; font-weight: 600; cursor: pointer;
+    }
+    .link-action:hover { text-decoration: underline; }
 
     .status-alert { margin-top: 16px; padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; display: none; }
     .alert-success { background: #d1fae5; color: #065f46; }
@@ -346,7 +352,7 @@
               </div>
               <div class="form-group">
                 <label>Teléfono</label>
-                <input type="text" id="profile-phone">
+                <input type="text" id="profile-phone" required>
               </div>
               <div class="form-group">
                 <label>Preferencias de Cookies (RGPD)</label>
@@ -374,12 +380,12 @@
   </div>
 
 
-  <!-- ================= VENTANA MODAL DE REGISTRO / LOGIN CON CONTRASEÑA ================= -->
+  <!-- ================= VENTANA MODAL DE AUTENTICACIÓN Y RECUPERACIÓN CON TELÉFONO ================= -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">&times;</button>
 
-      <!-- Formulario Login con Contraseña -->
+      <!-- 1. Formulario Login -->
       <div id="modal-login">
         <div class="modal-heading">Iniciar Sesión</div>
         <div class="modal-desc">Introduce tu correo y contraseña para acceder a tu panel cloud.</div>
@@ -394,12 +400,13 @@
           </div>
           <button type="submit" class="btn-action">🔓 Acceder a la Nube</button>
         </form>
+        <span class="link-action" onclick="switchModal('forgot')">¿No recuerdas tu contraseña?</span>
       </div>
 
-      <!-- Formulario Registro con Contraseña -->
+      <!-- 2. Formulario Registro -->
       <div id="modal-register" style="display: none;">
         <div class="modal-heading">Crear Cuenta Cloud</div>
-        <div class="modal-desc">Regístrate definiendo una contraseña segura para tu identidad. Se enviará un correo de bienvenida.</div>
+        <div class="modal-desc">Regístrate definiendo una contraseña y tu teléfono de validación.</div>
         <form onsubmit="handleRegister(event)">
           <div class="form-group">
             <label>Nombre Completo</label>
@@ -414,12 +421,36 @@
             <input type="password" id="reg-pass" required placeholder="••••••••">
           </div>
           <div class="form-group">
-            <label>Teléfono</label>
-            <input type="text" id="reg-phone" placeholder="+34 600 000 000">
+            <label>Teléfono (Clave de Validación)</label>
+            <input type="text" id="reg-phone" required placeholder="+34 600 000 000">
           </div>
           <button type="submit" class="btn-action" id="btn-submit-reg">🚀 Registrarse y Enviar Correo</button>
         </form>
+        <span class="link-action" onclick="switchModal('login')">¿Ya tienes una cuenta? Inicia sesión</span>
       </div>
+
+      <!-- 3. Formulario Recuperar / Cambiar Contraseña Validando Teléfono -->
+      <div id="modal-forgot" style="display: none;">
+        <div class="modal-heading">Restablecer Contraseña</div>
+        <div class="modal-desc">Introduce tu correo y el número de teléfono registrado para validar tu identidad.</div>
+        <form onsubmit="handleForgot(event)">
+          <div class="form-group">
+            <label>Correo Electrónico Registrado</label>
+            <input type="email" id="forgot-email" required placeholder="tu@correo.com">
+          </div>
+          <div class="form-group">
+            <label>Teléfono Registrado (Validación)</label>
+            <input type="text" id="forgot-phone" required placeholder="+34 600 000 000">
+          </div>
+          <div class="form-group">
+            <label>Nueva Contraseña Cloud</label>
+            <input type="password" id="forgot-newpass" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-action" style="background: #059669;">🔄 Validar y Cambiar Contraseña</button>
+        </form>
+        <span class="link-action" onclick="switchModal('login')">Volver al Inicio de Sesión</span>
+      </div>
+
       <div id="modal-status" class="status-alert"></div>
     </div>
   </div>
@@ -434,12 +465,20 @@
 
     function openAuthModal(type) {
       document.getElementById('auth-modal').style.display = 'flex';
+      switchModal(type);
+    }
+
+    function switchModal(type) {
+      document.getElementById('modal-login').style.display = 'none';
+      document.getElementById('modal-register').style.display = 'none';
+      document.getElementById('modal-forgot').style.display = 'none';
+
       if (type === 'login') {
         document.getElementById('modal-login').style.display = 'block';
-        document.getElementById('modal-register').style.display = 'none';
-      } else {
-        document.getElementById('modal-login').style.display = 'none';
+      } else if (type === 'register') {
         document.getElementById('modal-register').style.display = 'block';
+      } else if (type === 'forgot') {
+        document.getElementById('modal-forgot').style.display = 'block';
       }
     }
 
@@ -460,10 +499,33 @@
           closeAuthModal();
           showDashboard(email);
         } else {
-          alert("❌ Contraseña incorrecta. Por favor, verifica tus datos.");
+          alert("❌ Contraseña incorrecta. Por favor, verifica tus datos o utiliza la opción de recuperar contraseña.");
         }
       } else {
         alert("❌ No existe ninguna cuenta registrada con este correo.");
+      }
+    }
+
+    function handleForgot(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      const phoneInput = document.getElementById('forgot-phone').value.trim();
+      const newPass = document.getElementById('forgot-newpass').value;
+      const rawData = localStorage.getItem('ol_user_' + email);
+
+      if (rawData) {
+        let userData = JSON.parse(rawData);
+        // Validar que el teléfono introducido coincida exactamente con el de la base de datos
+        if (userData.phone === phoneInput) {
+          userData.password = newPass; // Actualiza la contraseña en la nube
+          localStorage.setItem('ol_user_' + email, JSON.stringify(userData));
+          alert("✅ ¡Identidad validada con éxito! Contraseña restablecida correctamente.");
+          switchModal('login');
+        } else {
+          alert("❌ El número de teléfono no coincide con el registrado en nuestra base de datos para este correo.");
+        }
+      } else {
+        alert("❌ El correo introducido no está registrado en Open Lain S.L.");
       }
     }
 
@@ -472,10 +534,10 @@
       const name = document.getElementById('reg-name').value;
       const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-pass').value;
-      const phone = document.getElementById('reg-phone').value;
+      const phone = document.getElementById('reg-phone').value.trim();
 
       if (localStorage.getItem('ol_user_' + email)) {
-        alert("⚠️ Ya existe una cuenta registrada con este correo.");
+        alert("⚠️ Ya existe una cuenta registrada con este correo. Si olvidaste tu contraseña, usa la opción de recuperación validando tu teléfono.");
         return;
       }
 
@@ -488,7 +550,6 @@
       btn.textContent = "⏳ Enviando correo de bienvenida...";
       btn.disabled = true;
 
-      // Parámetros que se envían a tu plantilla de EmailJS
       const templateParams = {
         to_name: name,
         to_email: email,
