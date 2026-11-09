@@ -3,614 +3,549 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open Lain S.L. | Identidad Soberana y Cloud Seguro</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function(){
-       emailjs.init({ publicKey: "TU_PUBLIC_KEY_DE_EMAILJS" });
-    })();
-  </script>
+  <title>NEXUS.ID - Centro de Control de Identidad</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary-color: #0070ba;
-      --primary-hover: #005ea6;
-      --bg-color: #f4f6f9;
-      --card-bg: #ffffff;
-      --text-main: #2c3e50;
-      --text-muted: #6c757d;
-      --border-color: #e3e8ee;
-      --sidebar-width: 260px;
-    }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
     }
-    #landing-view { display: flex; flex-direction: column; min-height: 100vh; }
-    header.landing-header { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-    .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #0070ba, #003087); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; }
-    .logo-text { font-size: 20px; font-weight: 800; color: #003087; letter-spacing: -0.5px; }
-    .nav-actions { display: flex; gap: 12px; align-items: center; }
-    .btn-nav-outline { padding: 10px 22px; border: 2px solid var(--primary-color); background: transparent; color: var(--primary-color); border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; }
-    .btn-nav-outline:hover { background: rgba(0, 112, 186, 0.05); }
-    .btn-nav-solid { padding: 10px 24px; border: none; background: var(--primary-color); color: white; border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3); transition: all 0.2s; }
-    .btn-nav-solid:hover { background: var(--primary-hover); }
-    .hero-section { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; background: radial-gradient(circle at 50% 20%, rgba(0, 112, 186, 0.08) 0%, transparent 60%); }
-    .hero-title { font-size: 44px; font-weight: 800; color: #0f172a; max-width: 750px; margin-bottom: 16px; letter-spacing: -1px; }
-    .hero-subtitle { font-size: 17px; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; line-height: 1.5; }
-    .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; width: 100%; max-width: 1000px; margin-top: 20px; text-align: left; }
-    .security-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: transform 0.3s; }
-    .security-card:hover { transform: translateY(-4px); }
-    .security-img { width: 100%; height: 160px; object-fit: cover; }
-    .security-body { padding: 20px; }
-    .security-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
-    .security-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
-
-    /* DASHBOARD LAYOUT */
-    #dashboard-view { display: none; flex: 1; flex-direction: row; min-height: 100vh; }
-    .sidebar { width: var(--sidebar-width); background: #ffffff; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px 0; box-sizing: border-box; }
-    .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 0 24px 24px 24px; border-bottom: 1px solid var(--border-color); font-size: 20px; font-weight: 800; color: #003087; }
-    .sidebar-menu { list-style: none; padding: 20px 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-item a { display: flex; align-items: center; gap: 10px; padding: 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; border-left: 4px solid transparent; transition: all 0.2s; cursor: pointer; }
-    .sidebar-item a:hover, .sidebar-item a.active { background: #f0f4f8; color: var(--primary-color); border-left-color: var(--primary-color); }
-    .main-dashboard { flex: 1; display: flex; flex-direction: column; background: #f5f7fa; }
-    .dash-topbar { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; }
-    .user-greeting { font-size: 22px; font-weight: 800; color: #0f172a; }
-    .dash-content { padding: 40px; max-width: 900px; box-sizing: border-box; width: 100%; }
-    
-    .section-card { display: none; background: #ffffff; border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-    .section-card.active { display: block; }
-    .section-card h3 { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 8px; }
-    .section-card p.subtitle { font-size: 13px; color: var(--text-muted); margin-top: 0; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    input, select, textarea { width: 100%; padding: 12px 14px; background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 12px; color: #0f172a; font-size: 14px; box-sizing: border-box; font-family: inherit; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-color); background: #ffffff; }
-    
-    .checkbox-group { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; }
-    .checkbox-group input[type="checkbox"] { width: auto; cursor: pointer; }
-    .checkbox-group label { margin: 0; text-transform: none; font-size: 14px; font-weight: 600; color: #0f172a; cursor: pointer; }
-
-    .btn-action { width: 100%; padding: 14px; background: var(--primary-color); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 12px; transition: all 0.2s; }
-    .btn-action:hover { background: var(--primary-hover); }
-
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; box-sizing: border-box; }
-    .modal-card { background: #ffffff; border-radius: 20px; padding: 36px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); position: relative; box-sizing: border-box; text-align: left; }
-    .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
-    .modal-heading { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
-    .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-    .link-action { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--primary-color); text-decoration: none; font-weight: 600; cursor: pointer; }
-    .link-action:hover { text-decoration: underline; }
-    footer { background: #ffffff; border-top: 1px solid var(--border-color); padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted); }
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .card-clean {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    }
+    .card-clean-hover {
+      transition: all 0.25s ease;
+    }
+    .card-clean-hover:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      transform: translateY(-2px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    /* Toggle switch style */
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #4f46e5;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #4f46e5;
+    }
+    .toast {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   </style>
 </head>
-<body>
-  <div id="landing-view">
-    <header class="landing-header">
-      <div class="logo-area" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <div class="logo-icon">OL</div>
-        <div class="logo-text">Open Lain S.L.</div>
-      </div>
-      <div class="nav-actions">
-        <button class="btn-nav-outline" onclick="openAuthModal('login')">Iniciar Sesión</button>
-        <button class="btn-nav-solid" onclick="openAuthModal('register')">Crear Cuenta</button>
-      </div>
-    </header>
-    <div class="hero-section">
-      <h1 class="hero-title">Identidad Soberana y Ciberseguridad Cloud</h1>
-      <p class="hero-subtitle">Gestiona de forma centralizada tus datos personales, de envío, pago y privacidad con cifrado seguro en Supabase.</p>
-      <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 40px;">
-        <button class="btn-nav-solid" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
-        <button class="btn-nav-outline" style="padding: 14px 28px; font-size: 15px;" onclick="openAuthModal('login')">Acceder a mi Cuenta</button>
-      </div>
-      <div class="security-grid">
-        <div class="security-card">
-          <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" alt="Cifrado Cloud" class="security-img">
-          <div class="security-body">
-            <h3 class="security-title">Cifrado de Grado Militar</h3>
-            <p class="security-desc">Tus datos personales, de pago e identidad viajan cifrados en la nube de Supabase.</p>
-          </div>
-        </div>
-        <div class="security-card">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Privacidad Absoluta" class="security-img">
-          <div class="security-body">
-            <h3 class="security-title">Control Total de Privacidad</h3>
-            <p class="security-desc">Tú decides qué datos compartir, la cesión a terceros y tus preferencias publicitarias.</p>
-          </div>
-        </div>
-        <div class="security-card">
-          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Autenticación 1-Click" class="security-img">
-          <div class="security-body">
-            <h3 class="security-title">Pago e Identidad 1-Clic</h3>
-            <p class="security-desc">Conecta tu información de envío y pago en webs socias sin rellenar formularios.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <footer>&copy; 2026 Open Lain S.L. Protocolo de Identidad Soberana.</footer>
-  </div>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-indigo-100 selection:text-indigo-900">
 
-  <div id="dashboard-view">
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <div class="logo-icon" style="width: 32px; height: 32px; font-size: 15px;">OL</div>
-        <span>Open Lain</span>
-      </div>
-      <ul class="sidebar-menu">
-        <li class="sidebar-item"><a onclick="showTab('personales')" id="tab-personales" class="active">👤 Datos Personales</a></li>
-        <li class="sidebar-item"><a onclick="showTab('direccion')" id="tab-direccion">📍 Dirección</a></li>
-        <li class="sidebar-item"><a onclick="showTab('pago')" id="tab-pago">💳 Datos de Pago</a></li>
-        <li class="sidebar-item"><a onclick="showTab('publicidad')" id="tab-publicidad">📢 Publicidad</a></li>
-        <li class="sidebar-item"><a onclick="showTab('privacidad')" id="tab-privacidad">🛡️ Privacidad</a></li>
-        <li class="sidebar-item"><a onclick="showTab('cookies')" id="tab-cookies">🍪 Cookies</a></li>
-      </ul>
-    </aside>
-    <div class="main-dashboard">
-      <header class="dash-topbar">
-        <div class="user-greeting" id="dash-greeting">¡Hola, Usuario!</div>
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <span style="font-size: 13px; font-weight: 700; color: #059669; background: #d1fae5; padding: 6px 14px; border-radius: 20px;">🟢 Supabase Cloud Activa</span>
-          <button class="btn-nav-outline" style="border-color: #ef4444; color: #ef4444; padding: 8px 16px; font-size: 13px;" onclick="logoutSession()">Cerrar Sesión</button>
-        </div>
-      </header>
-      <div class="dash-content">
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-        <!-- 1. DATOS PERSONALES -->
-        <div id="sec-personales" class="section-card active">
-          <h3>👤 Datos Personales</h3>
-          <p class="subtitle">Gestiona tu identidad básica sincronizada en la nube.</p>
-          <form onsubmit="saveProfileSection(event)">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Nombre Completo</label>
-                <input type="text" id="p-name" required placeholder="Ej. Ana García">
-              </div>
-              <div class="form-group">
-                <label>NIF / DNI / NIE</label>
-                <input type="text" id="p-nif" placeholder="12345678X">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Correo Electrónico</label>
-                <input type="email" id="p-email" disabled style="background: #e2e8f0; cursor: not-allowed;">
-              </div>
-              <div class="form-group">
-                <label>Teléfono de Contacto</label>
-                <input type="text" id="p-phone" required placeholder="+34 600 000 000">
-              </div>
-            </div>
-            <button type="submit" class="btn-action">💾 Guardar Datos Personales</button>
-          </form>
-        </div>
-
-        <!-- 2. DIRECCIÓN -->
-        <div id="sec-direccion" class="section-card">
-          <h3>📍 Dirección de Envío y Facturación</h3>
-          <p class="subtitle">Configura tus datos de envío rápido para checkouts en 1-clic.</p>
-          <form onsubmit="saveProfileSection(event)">
-            <div class="form-group">
-              <label>Calle / Vía Principal</label>
-              <input type="text" id="d-calle" placeholder="Ej. Av. de la Constitución, 15">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Piso / Puerta / Escalera</label>
-                <input type="text" id="d-piso" placeholder="Piso 3ºB">
-              </div>
-              <div class="form-group">
-                <label>Código Postal</label>
-                <input type="text" id="d-cp" placeholder="28001">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Ciudad / Municipio</label>
-                <input type="text" id="d-ciudad" placeholder="Madrid">
-              </div>
-              <div class="form-group">
-                <label>Provincia</label>
-                <input type="text" id="d-provincia" placeholder="Madrid">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Notas de Entrega (Repartidor)</label>
-              <textarea id="d-notas" rows="2" placeholder="Ej. Dejar en conserjería si no estoy."></textarea>
-            </div>
-            <button type="submit" class="btn-action">💾 Guardar Dirección</button>
-          </form>
-        </div>
-
-        <!-- 3. DATOS DE PAGO -->
-        <div id="sec-pago" class="section-card">
-          <h3>💳 Métodos de Pago Cifrados</h3>
-          <p class="subtitle">Guarda la información de tu tarjeta o IBAN para compras automáticas.</p>
-          <form onsubmit="saveProfileSection(event)">
-            <div class="form-group">
-              <label>Tipo de Pago Preferido</label>
-              <select id="pay-type" onchange="togglePayFields()">
-                <option value="tarjeta">💳 Tarjeta de Crédito / Débito</option>
-                <option value="iban">🏦 Cuenta Bancaria (IBAN)</option>
-              </select>
-            </div>
-
-            <div id="pay-card-fields">
-              <div class="form-group">
-                <label>Titular de la Tarjeta</label>
-                <input type="text" id="pay-card-holder" placeholder="Nombre como aparece en la tarjeta">
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Número de Tarjeta</label>
-                  <input type="text" id="pay-card-num" placeholder="**** **** **** 1234">
-                </div>
-                <div class="form-group">
-                  <label>Caducidad (MM/AA)</label>
-                  <input type="text" id="pay-card-exp" placeholder="12/28">
-                </div>
-              </div>
-            </div>
-
-            <div id="pay-iban-fields" style="display: none;">
-              <div class="form-group">
-                <label>Titular de la Cuenta</label>
-                <input type="text" id="pay-iban-holder" placeholder="Nombre del titular">
-              </div>
-              <div class="form-group">
-                <label>Número IBAN</label>
-                <input type="text" id="pay-iban-num" placeholder="ES91 0000 0000 0000 0000 0000">
-              </div>
-            </div>
-
-            <button type="submit" class="btn-action">💾 Guardar Métodos de Pago</button>
-          </form>
-        </div>
-
-        <!-- 4. PUBLICIDAD -->
-        <div id="sec-publicidad" class="section-card">
-          <h3>📢 Preferencias de Publicidad</h3>
-          <p class="subtitle">Elige cómo y cuándo quieres recibir comunicaciones comerciales.</p>
-          <form onsubmit="saveProfileSection(event)">
-            <div class="checkbox-group">
-              <input type="checkbox" id="pub-email">
-              <label for="pub-email">Recibir ofertas y novedades por Correo Electrónico</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="pub-sms">
-              <label for="pub-sms">Recibir alertas e invitaciones por SMS / WhatsApp</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="pub-partners">
-              <label for="pub-partners">Permitir promociones personalizadas de marcas colaboradoras</label>
-            </div>
-            <button type="submit" class="btn-action">💾 Guardar Preferencias Publicitarias</button>
-          </form>
-        </div>
-
-        <!-- 5. PRIVACIDAD -->
-        <div id="sec-privacidad" class="section-card">
-          <h3>🛡️ Cesión de Datos y Privacidad</h3>
-          <p class="subtitle">Controla el tratamiento soberano de tu información personal.</p>
-          <form onsubmit="saveProfileSection(event)">
-            <div class="checkbox-group">
-              <input type="checkbox" id="priv-terceros">
-              <label for="priv-terceros">Permitir facilitar datos a terceros para ámbito comercial</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="priv-estudios">
-              <label for="priv-estudios">Permitir uso de datos anónimos para estudios de mercado y estadísticas</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="priv-perfilado">
-              <label for="priv-perfilado">Permitir elaboración de perfiles de usuario para mejorar la experiencia</label>
-            </div>
-            <button type="submit" class="btn-action">💾 Guardar Ajustes de Privacidad</button>
-          </form>
-        </div>
-
-        <!-- 6. COOKIES -->
-        <div id="sec-cookies" class="section-card">
-          <h3>🍪 Configuración de Cookies</h3>
-          <p class="subtitle">Ajusta las políticas de rastreo web conforme al RGPD.</p>
-          <form onsubmit="saveProfileSection(event)">
-            <div class="form-group">
-              <label>Nivel de Aceptación de Cookies</label>
-              <select id="cookie-level">
-                <option value="all">🟢 Aceptar Todo (Técnicas, Analíticas y Publicitarias)</option>
-                <option value="minimal">🟡 Solo Técnicas / Mínimas Necesarias</option>
-                <option value="strict">🔴 Rechazar Todo lo No Esencial</option>
-              </select>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="ck-analytics" checked>
-              <label for="ck-analytics">Cookies de Rendimiento y Analítica</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="ck-marketing" checked>
-              <label for="ck-marketing">Cookies de Marketing y Seguimiento</label>
-            </div>
-            <button type="submit" class="btn-action">💾 Guardar Preferencias de Cookies</button>
-          </form>
-        </div>
-
-      </div>
-      <footer>&copy; 2026 Open Lain S.L. Protocolo Cloud de Identidad Soberana.</footer>
-    </div>
-  </div>
-
-  <!-- MODAL DE AUTENTICACIÓN -->
-  <div class="modal-overlay" id="auth-modal">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
-      <div id="modal-login">
-        <div class="modal-heading">Iniciar Sesión (Supabase)</div>
-        <div class="modal-desc">Introduce tus credenciales para acceder a la nube.</div>
-        <form onsubmit="handleLogin(event)">
-          <div class="form-group">
-            <label>Correo Electrónico</label>
-            <input type="email" id="login-email" required placeholder="tu@correo.com">
-          </div>
-          <div class="form-group">
-            <label>Contraseña</label>
-            <input type="password" id="login-pass" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn-action">🔓 Acceder a Supabase</button>
-        </form>
-        <span class="link-action" onclick="switchModal('forgot')">¿No recuerdas tu contraseña?</span>
-      </div>
-
-      <div id="modal-register" style="display: none;">
-        <div class="modal-heading">Crear Cuenta Cloud</div>
-        <div class="modal-desc">Registro rápido con clave de validación.</div>
-        <form onsubmit="handleRegister(event)">
-          <div class="form-group">
-            <label>Nombre Completo</label>
-            <input type="text" id="reg-name" required placeholder="Ej. Ana García">
-          </div>
-          <div class="form-group">
-            <label>Correo Electrónico</label>
-            <input type="email" id="reg-email" required placeholder="tu@correo.com">
-          </div>
-          <div class="form-group">
-            <label>Contraseña Cloud</label>
-            <input type="password" id="reg-pass" required placeholder="••••••••">
-          </div>
-          <div class="form-group">
-            <label>Teléfono (Clave de Validación)</label>
-            <input type="text" id="reg-phone" required placeholder="600000000">
-          </div>
-          <button type="submit" class="btn-action" id="btn-submit-reg">🚀 Registrarse en la Nube</button>
-        </form>
-        <span class="link-action" onclick="switchModal('login')">¿Ya tienes cuenta? Inicia sesión</span>
-      </div>
-
-      <div id="modal-forgot" style="display: none;">
-        <div class="modal-heading">Restablecer Contraseña</div>
-        <div class="modal-desc">Introduce tu correo y teléfono para restablecer.</div>
-        <form onsubmit="handleForgot(event)">
-          <div class="form-group">
-            <label>Correo Electrónico Registrado</label>
-            <input type="email" id="forgot-email" required placeholder="tu@correo.com">
-          </div>
-          <div class="form-group">
-            <label>Teléfono Registrado</label>
-            <input type="text" id="forgot-phone" required placeholder="600000000">
-          </div>
-          <div class="form-group">
-            <label>Nueva Contraseña Cloud</label>
-            <input type="password" id="forgot-newpass" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn-action" style="background: #059669;">🔄 Validar y Actualizar Clave</button>
-        </form>
-        <span class="link-action" onclick="switchModal('login')">Volver al Inicio de Sesión</span>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const SUPABASE_URL = "https://inanizgxhxycmtupqdji.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_Dnxoz52wg2rbwWDP46V4xQ_s9OgD4rP"; 
-    
-    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await _supabase.auth.getSession();
-      if (session) { loadUserProfile(session.user); }
-    });
-
-    function showTab(tabName) {
-      document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.sidebar-item a').forEach(el => el.classList.remove('active'));
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
-      document.getElementById('sec-' + tabName).classList.add('active');
-      document.getElementById('tab-' + tabName).classList.add('active');
-    }
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-heading font-bold text-xl shadow-md shadow-indigo-200">
+          N
+        </div>
+        <div>
+          <span class="font-heading font-bold text-lg tracking-tight text-slate-900">NEXUS<span class="text-indigo-600">.ID</span></span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">En línea</span>
+        </div>
+      </div>
 
-    function togglePayFields() {
-      const type = document.getElementById('pay-type').value;
-      if (type === 'tarjeta') {
-        document.getElementById('pay-card-fields').style.display = 'block';
-        document.getElementById('pay-iban-fields').style.display = 'none';
-      } else {
-        document.getElementById('pay-card-fields').style.display = 'none';
-        document.getElementById('pay-iban-fields').style.display = 'block';
-      }
-    }
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200">
+        <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-indigo-600 bg-white shadow-sm transition">
+          <i class="fa-solid fa-chart-pie mr-2"></i>Resumen
+        </button>
+        <button onclick="switchTab('security')" id="tab-security" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition">
+          <i class="fa-solid fa-shield-halved mr-2"></i>Seguridad
+        </button>
+        <button onclick="switchTab('apps')" id="tab-apps" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-slate-900 transition">
+          <i class="fa-solid fa-cubes mr-2"></i>Aplicaciones
+        </button>
+      </nav>
 
-    function openAuthModal(type) {
-      document.getElementById('auth-modal').style.display = 'flex';
-      switchModal(type);
-    }
+      <!-- User Profile Dropdown / Actions -->
+      <div class="flex items-center gap-3">
+        <button onclick="openEditModal()" class="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-slate-100 transition border border-transparent hover:border-slate-200">
+          <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm" id="nav-avatar">
+            AA
+          </div>
+          <div class="text-left hidden sm:block">
+            <p class="text-xs font-bold text-slate-800 leading-none" id="nav-username">Alex Adrian</p>
+            <p class="text-[10px] text-slate-500 font-medium">Cuenta Personal</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    function switchModal(type) {
-      document.getElementById('modal-login').style.display = 'none';
-      document.getElementById('modal-register').style.display = 'none';
-      document.getElementById('modal-forgot').style.display = 'none';
-      if (type === 'login') document.getElementById('modal-login').style.display = 'block';
-      else if (type === 'register') document.getElementById('modal-register').style.display = 'block';
-      else if (type === 'forgot') document.getElementById('modal-forgot').style.display = 'block';
-    }
+  <!-- Main Content Layout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    
+    <!-- Hero / Profile Banner -->
+    <div class="card-clean rounded-2xl p-6 md:p-8 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-slate-200">
+      <div class="flex items-center gap-5">
+        <div class="relative">
+          <div class="w-20 h-20 rounded-2xl bg-slate-900 text-white font-heading font-bold text-2xl flex items-center justify-center shadow-lg shadow-indigo-100" id="hero-avatar">
+            AA
+          </div>
+          <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full" title="Estado activo"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-bold font-heading text-slate-900" id="hero-username">Alex Adrian</h1>
+            <span class="px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full">Verificado</span>
+          </div>
+          <p class="text-slate-500 text-sm mt-1" id="hero-email">alex.adrian@nexus.id</p>
+          <p class="text-xs text-slate-400 mt-2 font-mono"><i class="fa-solid fa-key mr-1.5 text-slate-400"></i>ID: nx_8f93a02c91b4</p>
+        </div>
+      </div>
+      
+      <div class="flex flex-wrap items-center gap-3 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0 border-slate-100">
+        <button onclick="openEditModal()" class="flex-1 md:flex-none px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-pen-to-square"></i>Editar Perfil
+        </button>
+        <button onclick="showToast('Enlace de sesión copiado al portapapeles', 'info')" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-share-nodes"></i>Compartir
+        </button>
+      </div>
+    </div>
 
-    function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+    <!-- TAB 1: OVERVIEW SECTION -->
+    <div id="section-overview" class="tab-content space-y-8">
+      
+      <!-- Metrics Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <div class="card-clean card-clean-hover p-5 rounded-2xl">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Estado de Seguridad</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+          </div>
+          <p class="text-2xl font-bold font-heading text-slate-900">Óptimo</p>
+          <p class="text-xs text-emerald-600 font-medium mt-1"><i class="fa-solid fa-arrow-up mr-1"></i>2FA Activado</p>
+        </div>
 
-    async function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-pass').value;
-      const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-      if (error) { alert("❌ Error al iniciar sesión: " + error.message); }
-      else { closeAuthModal(); loadUserProfile(data.user); }
-    }
+        <div class="card-clean card-clean-hover p-5 rounded-2xl">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Sesiones Activas</span>
+            <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-desktop"></i>
+            </div>
+          </div>
+          <p class="text-2xl font-bold font-heading text-slate-900" id="session-count">3 Dispositivos</p>
+          <p class="text-xs text-slate-500 font-medium mt-1">Último acceso hace 2m</p>
+        </div>
 
-    async function handleRegister(e) {
-      e.preventDefault();
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-pass').value;
-      const phone = document.getElementById('reg-phone').value.trim();
-      const btn = document.getElementById('btn-submit-reg');
-      btn.textContent = "⏳ Registrando en Supabase...";
-      btn.disabled = true;
+        <div class="card-clean card-clean-hover p-5 rounded-2xl">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Apps Vinculadas</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-link"></i>
+            </div>
+          </div>
+          <p class="text-2xl font-bold font-heading text-slate-900">8 Conexiones</p>
+          <p class="text-xs text-slate-500 font-medium mt-1">Sincronización activa</p>
+        </div>
 
-      const { data, error } = await _supabase.auth.signUp({
-        email, password,
-        options: { data: { full_name: name, phone_number: phone } }
+        <div class="card-clean card-clean-hover p-5 rounded-2xl">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Privacidad</span>
+            <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-user-lock"></i>
+            </div>
+          </div>
+          <p class="text-2xl font-bold font-heading text-slate-900">Personalizada</p>
+          <p class="text-xs text-purple-600 font-medium mt-1">Cookies controladas</p>
+        </div>
+
+      </div>
+
+      <!-- Main Columns: Activity & Quick Preferences -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Activity Log (2 cols) -->
+        <div class="lg:col-span-2 card-clean rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900 font-heading">Actividad Reciente</h2>
+              <p class="text-xs text-slate-500">Historial de autenticación e inicios de sesión</p>
+            </div>
+            <button onclick="showToast('Historial actualizado', 'info')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+              <i class="fa-solid fa-rotate-right mr-1"></i>Actualizar
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            
+            <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-indigo-600 flex items-center justify-center">
+                  <i class="fa-solid fa-laptop"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-slate-900">Chrome en macOS (Madrid, ESP)</p>
+                  <p class="text-xs text-slate-500">Dirección IP: 88.12.240.15 • Sesión actual</p>
+                </div>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-lg">Activo</span>
+            </div>
+
+            <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-600 flex items-center justify-center">
+                  <i class="fa-solid fa-mobile-screen"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-slate-900">NEXUS Mobile App (iOS)</p>
+                  <p class="text-xs text-slate-500">Dirección IP: 185.220.101.5 • Hace 2 horas</p>
+                </div>
+              </div>
+              <span class="text-xs font-medium text-slate-400">Hace 2h</span>
+            </div>
+
+            <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-600 flex items-center justify-center">
+                  <i class="fa-solid fa-globe"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-slate-900">Inicio de sesión en Partner Web</p>
+                  <p class="text-xs text-slate-500">Autenticación OpenID Connect • Ayer</p>
+                </div>
+              </div>
+              <span class="text-xs font-medium text-slate-400">Ayer</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Privacy & Sync Controls (1 col) -->
+        <div class="card-clean rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900 font-heading mb-1">Ajustes Rápidos</h2>
+            <p class="text-xs text-slate-500 mb-6">Preferencias globales de sincronización</p>
+            
+            <div class="space-y-5">
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-slate-800">Sincronización Automática</p>
+                  <p class="text-xs text-slate-500">Mantener cookies y sesión activas</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked onchange="toggleSetting('Sincronización automática', this.checked)" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-slate-800">Alertas de Seguridad</p>
+                  <p class="text-xs text-slate-500">Notificar accesos sospechosos</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked onchange="toggleSetting('Alertas de seguridad', this.checked)" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-slate-800">Modo Público Estricto</p>
+                  <p class="text-xs text-slate-500">Eliminar rastro al cerrar pestaña</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" onchange="toggleSetting('Modo público estricto', this.checked)" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-slate-100">
+            <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4 flex items-start gap-3">
+              <i class="fa-solid fa-circle-info text-indigo-600 text-sm mt-0.5"></i>
+              <p class="text-xs text-indigo-900 font-medium">Tus datos están protegidos bajo cifrado de extremo a extremo.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 2: SECURITY SECTION -->
+    <div id="section-security" class="tab-content hidden space-y-6">
+      <div class="card-clean rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 font-heading mb-2">Gestión de Sesiones</h2>
+        <p class="text-xs text-slate-500 mb-6">Dispositivos con acceso a tu cuenta NEXUS ID</p>
+
+        <div class="space-y-4" id="session-list">
+          <!-- Session Item 1 -->
+          <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200" id="session-1">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-desktop"></i>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">MacBook Pro 16" (Este equipo)</p>
+                <p class="text-xs text-slate-500">Chrome • Madrid, España • Activo ahora</p>
+              </div>
+            </div>
+            <span class="text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full">Actual</span>
+          </div>
+
+          <!-- Session Item 2 -->
+          <div class="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200" id="session-2">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">iPhone 15 Pro</p>
+                <p class="text-xs text-slate-500">Safari • Barcelona, España • Hace 2 horas</p>
+              </div>
+            </div>
+            <button onclick="revokeSession('session-2', 'iPhone 15 Pro')" class="px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition">
+              Revocar
+            </button>
+          </div>
+
+          <!-- Session Item 3 -->
+          <div class="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200" id="session-3">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-tablet-screen-button"></i>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">iPad Air</p>
+                <p class="text-xs text-slate-500">App NEXUS • Valencia, España • Hace 3 días</p>
+              </div>
+            </div>
+            <button onclick="revokeSession('session-3', 'iPad Air')" class="px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition">
+              Revocar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: APPS SECTION -->
+    <div id="section-apps" class="tab-content hidden space-y-6">
+      <div class="card-clean rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-slate-900 font-heading mb-2">Ecosistema Conectado</h2>
+        <p class="text-xs text-slate-500 mb-6">Plataformas asociadas con inicio de sesión automático</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 bg-white flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center">V</div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">ValueTok Network</p>
+                <p class="text-xs text-slate-500">Acceso a perfil y analíticas</p>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">Conectado</span>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-white flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center">O</div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">Open Lain Cloud</p>
+                <p class="text-xs text-slate-500">Sincronización de preferencias</p>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">Conectado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2 text-slate-500 text-xs">
+        <span class="font-heading font-bold text-slate-800">NEXUS.ID</span>
+        <span>© 2026 Plataforma de Identidad Centralizada</span>
+      </div>
+      <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
+        <a href="#" class="hover:text-indigo-600 transition">Privacidad</a>
+        <a href="#" class="hover:text-indigo-600 transition">Términos</a>
+        <a href="#" class="hover:text-indigo-600 transition">Soporte Tecnológico</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal for Editing Profile -->
+  <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+    <div class="card-clean rounded-2xl w-full max-w-md p-6 m-4 shadow-2xl relative transform scale-95 transition-transform duration-200" id="modal-box">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+        <h3 class="text-lg font-bold text-slate-900 font-heading">Editar Perfil</h3>
+        <button onclick="closeEditModal()" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nombre Completo</label>
+          <input type="text" id="input-name" value="Alex Adrian" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Correo Electrónico</label>
+          <input type="email" id="input-email" value="alex.adrian@nexus.id" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+        </div>
+
+        <div class="pt-4 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+            Cancelar
+          </button>
+          <button type="submit" class="px-4 py-2.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition shadow-sm">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript Interactions -->
+  <script>
+    // Tab switching functionality
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
+        btn.classList.add('text-slate-600');
       });
 
-      if (error) {
-        alert("⚠️ Error en el registro: " + error.message);
-        btn.textContent = "🚀 Registrarse en la Nube";
-        btn.disabled = false;
-        return;
-      }
-
-      alert("✅ ¡Cuenta creada con éxito en Supabase!");
-      closeAuthModal();
-      if (data.user) {
-        loadUserProfile(data.user);
-      } else {
-        switchModal('login');
-      }
-      btn.textContent = "🚀 Registrarse en la Nube";
-      btn.disabled = false;
+      document.getElementById('section-' + tabName).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tabName);
+      activeBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
+      activeBtn.classList.remove('text-slate-600');
     }
 
-    async function handleForgot(e) {
+    // Modal Control
+    function openEditModal() {
+      const modal = document.getElementById('edit-modal');
+      const box = document.getElementById('modal-box');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeEditModal() {
+      const modal = document.getElementById('edit-modal');
+      const box = document.getElementById('modal-box');
+      modal.classList.add('opacity-0');
+      box.classList.remove('scale-100');
+      box.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
+
+    // Profile Saving Simulation
+    function saveProfile(e) {
       e.preventDefault();
-      const phoneInput = document.getElementById('forgot-phone').value.trim();
-      const { data: profile, error } = await _supabase.from('profiles').select('*').eq('phone_number', phoneInput).single();
-      if (error || !profile) {
-        alert("❌ El número de teléfono no coincide con ningún registro.");
-        return;
-      }
-      alert("✅ ¡Teléfono validado correctamente en la base de datos!");
-      switchModal('login');
+      const newName = document.getElementById('input-name').value;
+      const newEmail = document.getElementById('input-email').value;
+
+      // Extract initials
+      const initials = newName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'US';
+
+      // Update UI elements
+      document.getElementById('hero-username').innerText = newName;
+      document.getElementById('hero-email').innerText = newEmail;
+      document.getElementById('nav-username').innerText = newName;
+      document.getElementById('hero-avatar').innerText = initials;
+      document.getElementById('nav-avatar').innerText = initials;
+
+      closeEditModal();
+      showToast('Perfil actualizado correctamente', 'success');
     }
 
-    async function loadUserProfile(user) {
-      document.getElementById('dash-greeting').textContent = "¡Hola, " + (user.user_metadata?.full_name || user.email) + "!";
-      document.getElementById('p-email').value = user.email;
-
-      const { data: profile } = await _supabase.from('profiles').select('*').eq('id', user.id).single();
-
-      if (profile) {
-        // Datos Personales
-        document.getElementById('p-name').value = profile["full name"] || user.user_metadata?.full_name || "";
-        document.getElementById('p-phone').value = profile.phone_number || user.user_metadata?.phone_number || "";
-        document.getElementById('p-nif').value = profile.nif_dni || "";
-
-        // Dirección
-        document.getElementById('d-calle').value = profile.direccion || "";
-        document.getElementById('d-piso').value = profile.piso_puerta || "";
-        document.getElementById('d-cp').value = profile.codigo_postal || "";
-        document.getElementById('d-ciudad').value = profile.ciudad || "";
-        document.getElementById('d-provincia').value = profile.provincia || "";
-        document.getElementById('d-notas').value = profile.notas_entrega || "";
-
-        // Pago
-        if (profile.pay_type) document.getElementById('pay-type').value = profile.pay_type;
-        togglePayFields();
-        document.getElementById('pay-card-holder').value = profile.pay_card_holder || "";
-        document.getElementById('pay-card-num').value = profile.pay_card_num || "";
-        document.getElementById('pay-card-exp').value = profile.pay_card_exp || "";
-        document.getElementById('pay-iban-holder').value = profile.pay_iban_holder || "";
-        document.getElementById('pay-iban-num').value = profile.pay_iban_num || "";
-
-        // Publicidad
-        document.getElementById('pub-email').checked = profile.pub_email ?? false;
-        document.getElementById('pub-sms').checked = profile.pub_sms ?? false;
-        document.getElementById('pub-partners').checked = profile.pub_partners ?? false;
-
-        // Privacidad
-        document.getElementById('priv-terceros').checked = profile.priv_terceros ?? false;
-        document.getElementById('priv-estudios').checked = profile.priv_estudios ?? false;
-        document.getElementById('priv-perfilado').checked = profile.priv_perfilado ?? false;
-
-        // Cookies
-        if (profile.cookies) document.getElementById('cookie-level').value = profile.cookies;
-        document.getElementById('ck-analytics').checked = profile.ck_analytics ?? true;
-        document.getElementById('ck-marketing').checked = profile.ck_marketing ?? true;
+    // Revoke Session
+    function revokeSession(elementId, deviceName) {
+      const elem = document.getElementById(elementId);
+      if(elem) {
+        elem.style.opacity = '0';
+        elem.style.transform = 'translateX(20px)';
+        elem.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          elem.remove();
+          showToast('Sesión de ' + deviceName + ' revocada', 'warning');
+        }, 300);
       }
-
-      document.getElementById('landing-view').style.display = 'none';
-      document.getElementById('dashboard-view').style.display = 'flex';
     }
 
-    async function saveProfileSection(e) {
-      e.preventDefault();
-      const { data: { user } } = await _supabase.auth.getUser();
-      if (!user) return;
+    // Settings Toggle Handler
+    function toggleSetting(name, state) {
+      const statusText = state ? 'activado' : 'desactivado';
+      showToast(name + ' ' + statusText, 'info');
+    }
 
-      const profileData = {
-        id: user.id,
-        "full name": document.getElementById('p-name').value,
-        phone_number: document.getElementById('p-phone').value,
-        nif_dni: document.getElementById('p-nif').value,
-
-        direccion: document.getElementById('d-calle').value,
-        piso_puerta: document.getElementById('d-piso').value,
-        codigo_postal: document.getElementById('d-cp').value,
-        ciudad: document.getElementById('d-ciudad').value,
-        provincia: document.getElementById('d-provincia').value,
-        notas_entrega: document.getElementById('d-notas').value,
-
-        pay_type: document.getElementById('pay-type').value,
-        pay_card_holder: document.getElementById('pay-card-holder').value,
-        pay_card_num: document.getElementById('pay-card-num').value,
-        pay_card_exp: document.getElementById('pay-card-exp').value,
-        pay_iban_holder: document.getElementById('pay-iban-holder').value,
-        pay_iban_num: document.getElementById('pay-iban-num').value,
-
-        pub_email: document.getElementById('pub-email').checked,
-        pub_sms: document.getElementById('pub-sms').checked,
-        pub_partners: document.getElementById('pub-partners').checked,
-
-        priv_terceros: document.getElementById('priv-terceros').checked,
-        priv_estudios: document.getElementById('priv-estudios').checked,
-        priv_perfilado: document.getElementById('priv-perfilado').checked,
-
-        cookies: document.getElementById('cookie-level').value,
-        ck_analytics: document.getElementById('ck-analytics').checked,
-        ck_marketing: document.getElementById('ck-marketing').checked
+    // Toast Notification System
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      let borderColors = {
+        success: 'border-emerald-500 bg-emerald-50 text-emerald-900',
+        warning: 'border-amber-500 bg-amber-50 text-amber-900',
+        info: 'border-indigo-500 bg-indigo-50 text-indigo-900'
       };
 
-      const { error } = await _supabase.from('profiles').upsert(profileData);
+      let icons = {
+        success: 'fa-circle-check text-emerald-600',
+        warning: 'fa-triangle-exclamation text-amber-600',
+        info: 'fa-circle-info text-indigo-600'
+      };
 
-      if (error) {
-        alert("❌ Error al guardar datos: " + error.message);
-      } else {
-        alert("✅ ¡Sección guardada y sincronizada en Supabase!");
-      }
-    }
+      toast.className = `toast pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${borderColors[type]} shadow-lg text-xs font-semibold border-l-4 translate-y-2 opacity-0`;
+      toast.innerHTML = `<i class="fa-solid ${icons[type]} text-sm"></i> <span>${message}</span>`;
 
-    async function logoutSession() {
-      await _supabase.auth.signOut();
-      document.getElementById('dashboard-view').style.display = 'none';
-      document.getElementById('landing-view').style.display = 'flex';
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
     }
   </script>
 </body>
