@@ -79,6 +79,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 flex-1 flex flex-col items-center justify-center text-center">
+      
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-slate-900 max-w-3xl leading-tight mb-6">
         El mundo bajo tus pies<br>con un solo clic
       </h1>
@@ -88,7 +89,7 @@
       </span>
 
       <p class="text-slate-500 text-sm sm:text-base md:text-lg max-w-2xl mb-8 sm:mb-10 leading-relaxed px-2">
-        Gestiona de forma centralizada tus datos personales, de envío, pago y privacidad con cifrado seguro en Supabase. Cero rastro en el dispositivo.
+        Gestiona de forma centralizada tus datos personales, de envío, pago con CVV y privacidad con cifrado seguro en Supabase. Cero rastro en el dispositivo.
       </p>
       
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 w-full sm:w-auto px-4">
@@ -107,7 +108,7 @@
             <h3 class="text-base sm:text-lg font-bold font-heading text-slate-900 mb-2 flex items-center gap-2">
               <i class="fa-solid fa-shield-halved text-indigo-600"></i>Cifrado Militar
             </h3>
-            <p class="text-xs text-slate-500 leading-relaxed">Tus datos personales, fiscales y métodos de pago viajan encriptados a tu base de datos Supabase.</p>
+            <p class="text-xs text-slate-500 leading-relaxed">Tus datos personales, fiscales y tarjetas con CVV viajan encriptados a tu base de datos Supabase.</p>
           </div>
         </div>
         
@@ -142,6 +143,7 @@
 
   <!-- DASHBOARD VIEW -->
   <div id="dashboard-view" class="hidden min-h-screen flex-col justify-between">
+    
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center gap-2 sm:gap-3">
@@ -171,6 +173,7 @@
       </div>
     </header>
 
+    <!-- Main Navigation Bar -->
     <div class="bg-white border-b border-slate-200 py-2.5 sm:py-3 sticky top-16 z-30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
@@ -196,7 +199,10 @@
       </div>
     </div>
 
+    <!-- Main Content Layout -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full">
+      
+      <!-- User Hero Banner -->
       <div class="card-clean rounded-2xl p-5 sm:p-6 md:p-8 mb-6 sm:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 border border-slate-200">
         <div class="flex items-center gap-4 sm:gap-5 w-full md:w-auto">
           <div class="relative shrink-0">
@@ -221,7 +227,8 @@
         </div>
       </div>
 
-      <div class="max-w-4xl mx-auto space-y-6">
+      <!-- SECTIONS -->
+      <div class="max-w-4xl mx-auto">
         
         <!-- 1. DATOS PERSONALES -->
         <div id="sec-personales" class="section-card card-clean rounded-2xl overflow-hidden border border-slate-200">
@@ -255,40 +262,30 @@
                 </div>
               </div>
 
+              <!-- Bloque para cambiar contraseña -->
+              <div class="pt-4 border-t border-slate-100">
+                <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+                  <i class="fa-solid fa-key text-indigo-600"></i>Seguridad y Contraseña
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nueva Contraseña (Opcional)</label>
+                    <input type="password" id="p-new-pass" placeholder="Dejar en blanco para no cambiar" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  </div>
+                  <div class="flex items-end">
+                    <button type="button" onclick="handleChangePassword()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-300 transition flex items-center justify-center gap-2">
+                      <i class="fa-solid fa-shield-halved text-indigo-600"></i>Actualizar Contraseña
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div class="pt-2">
                 <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
                   <i class="fa-solid fa-floppy-disk"></i>Guardar Datos Personales
                 </button>
               </div>
             </form>
-
-            <!-- SECCIÓN NUEVA: CAMBIAR CONTRASEÑA -->
-            <div class="pt-6 border-t border-slate-200">
-              <div class="mb-4">
-                <h3 class="text-base font-bold text-slate-900 font-heading flex items-center gap-2">
-                  <i class="fa-solid fa-key text-indigo-600"></i>Cambiar Contraseña
-                </h3>
-                <p class="text-xs text-slate-500">Actualiza tu contraseña de acceso a la plataforma.</p>
-              </div>
-
-              <form onsubmit="changePassword(event)" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nueva Contraseña</label>
-                    <input type="password" id="new-password" required minlength="6" placeholder="Mínimo 6 caracteres" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Confirmar Contraseña</label>
-                    <input type="password" id="confirm-password" required minlength="6" placeholder="Repite la contraseña" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                  </div>
-                </div>
-
-                <button type="submit" id="btn-change-pass" class="w-full sm:w-auto px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-lock"></i>Actualizar Contraseña
-                </button>
-              </form>
-            </div>
-
           </div>
         </div>
 
@@ -343,13 +340,13 @@
           </div>
         </div>
 
-        <!-- 3. DATOS DE PAGO -->
+        <!-- 3. DATOS DE PAGO (INCLUYENDO CVV) -->
         <div id="sec-pago" class="section-card hidden card-clean rounded-2xl overflow-hidden border border-slate-200">
           <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80" alt="Métodos de Pago" class="w-full h-36 sm:h-48 object-cover">
           <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
             <div>
               <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">💳 Métodos de Pago Cifrados</h2>
-              <p class="text-xs text-slate-500">Guarda la información de tu tarjeta o IBAN para compras automáticas.</p>
+              <p class="text-xs text-slate-500">Guarda la información de tu tarjeta (con CVV seguro) o IBAN para compras automáticas.</p>
             </div>
 
             <form onsubmit="saveProfileSection(event)" class="space-y-4 sm:space-y-5">
@@ -366,15 +363,20 @@
                   <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Titular de la Tarjeta</label>
                   <input type="text" id="pay-card-holder" placeholder="Nombre como aparece en la tarjeta" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div class="sm:col-span-2">
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Número de Tarjeta</label>
                     <input type="text" id="pay-card-num" placeholder="**** **** **** 1234" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                   </div>
                   <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Caducidad (MM/AA)</label>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Caducidad</label>
                     <input type="text" id="pay-card-exp" placeholder="12/28" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                   </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">CVV / Código de Seguridad</label>
+                  <input type="password" id="pay-card-cvv" maxlength="4" placeholder="123" class="w-full sm:w-1/3 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  <p class="text-[11px] text-slate-400 mt-1">Código de 3 o 4 dígitos al dorso de la tarjeta.</p>
                 </div>
               </div>
 
@@ -776,6 +778,21 @@
       switchModal('login');
     }
 
+    async function handleChangePassword() {
+      const newPassword = document.getElementById('p-new-pass').value;
+      if (!newPassword || newPassword.length < 6) {
+        showToast("Introduce una contraseña válida de al menos 6 caracteres.", 'warning');
+        return;
+      }
+      const { error } = await _supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        showToast("Error al actualizar contraseña: " + error.message, 'warning');
+      } else {
+        showToast("¡Contraseña actualizada en Supabase con éxito!", 'success');
+        document.getElementById('p-new-pass').value = "";
+      }
+    }
+
     async function loadUserProfile(user) {
       const displayName = user.user_metadata?.full_name || user.email;
       const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'US';
@@ -807,6 +824,7 @@
         document.getElementById('pay-card-holder').value = profile.pay_card_holder || "";
         document.getElementById('pay-card-num').value = profile.pay_card_num || "";
         document.getElementById('pay-card-exp').value = profile.pay_card_exp || "";
+        document.getElementById('pay-card-cvv').value = profile.pay_card_cvv || "";
         document.getElementById('pay-iban-holder').value = profile.pay_iban_holder || "";
         document.getElementById('pay-iban-num').value = profile.pay_iban_num || "";
 
@@ -850,6 +868,7 @@
         pay_card_holder: document.getElementById('pay-card-holder').value,
         pay_card_num: document.getElementById('pay-card-num').value,
         pay_card_exp: document.getElementById('pay-card-exp').value,
+        pay_card_cvv: document.getElementById('pay-card-cvv').value,
         pay_iban_holder: document.getElementById('pay-iban-holder').value,
         pay_iban_num: document.getElementById('pay-iban-num').value,
 
@@ -882,35 +901,6 @@
           document.getElementById('nav-avatar').textContent = initials;
         }
       }
-    }
-
-    // NUEVA FUNCIÓN PARA CAMBIAR CONTRASEÑA EN SUPABASE AUTH
-    async function changePassword(e) {
-      e.preventDefault();
-      const newPass = document.getElementById('new-password').value;
-      const confirmPass = document.getElementById('confirm-password').value;
-      const btn = document.getElementById('btn-change-pass');
-
-      if (newPass !== confirmPass) {
-        showToast("Las contraseñas no coinciden.", 'warning');
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Actualizando...`;
-
-      const { error } = await _supabase.auth.updateUser({ password: newPass });
-
-      if (error) {
-        showToast("Error al cambiar la contraseña: " + error.message, 'warning');
-      } else {
-        showToast("¡Contraseña actualizada correctamente!", 'success');
-        document.getElementById('new-password').value = "";
-        document.getElementById('confirm-password').value = "";
-      }
-
-      btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-lock"></i> Actualizar Contraseña`;
     }
 
     async function logoutSession() {
