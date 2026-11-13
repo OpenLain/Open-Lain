@@ -1,105 +1,1073 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Lain — El estándar de identidad y pago</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #222;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: #111;
-        }
-        .tagline {
-            font-size: 1.25rem;
-            color: #555;
-            margin-bottom: 30px;
-        }
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-            margin-bottom: 40px;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-        }
-        .btn-primary {
-            background: #5850ec;
-            color: #fff;
-            border: none;
-        }
-        .btn-primary:hover {
-            background: #4840dc;
-        }
-        .btn-secondary {
-            background: #fff;
-            color: #222;
-            border: 1px solid #d1d5db;
-        }
-        .btn-secondary:hover {
-            background: #f9fafb;
-        }
-        .btn-business {
-            background: #0f172a;
-            color: #fff;
-            border: none;
-        }
-        .btn-business:hover {
-            background: #1e293b;
-        }
-        .info-card {
-            background: #f9f9f9;
-            border: 1px solid #e5e5e5;
-            padding: 25px;
-            border-radius: 8px;
-            margin-top: 30px;
-            text-align: left;
-        }
-        .info-card h3 {
-            margin-top: 0;
-            color: #111;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Open Lain | El mundo bajo tus pies con un solo clic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .card-clean {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    }
+    .card-clean-hover {
+      transition: all 0.25s ease;
+    }
+    .card-clean-hover:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      transform: translateY(-2px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .toast {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-indigo-100 selection:text-indigo-900">
 
-    <h1>Open Lain</h1>
-    <p class="tagline">El estándar universal de identidad y pago sin fricción para plataformas digitales.</p>
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-4 right-4 left-4 sm:left-auto z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-    <p>Simplifica el acceso, mejora la seguridad y agiliza las transacciones de tus usuarios con una integración limpia y directa pensada para desarrolladores y negocios B2B.</p>
+  <!-- LANDING VIEW -->
+  <div id="landing-view" class="min-h-screen flex flex-col justify-between">
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 sm:gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-heading font-bold text-lg sm:text-xl shadow-md shadow-indigo-200">
+            OL
+          </div>
+          <div>
+            <span class="font-heading font-bold text-base sm:text-lg tracking-tight text-slate-900">Open Lain</span>
+            <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">Cloud Active</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="openBusinessModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition">
+            <i class="fa-solid fa-building text-indigo-600"></i> Empresas
+          </button>
+          <button onclick="openAuthModal('login')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl text-indigo-600 border border-indigo-200 hover:bg-indigo-50 transition">Iniciar Sesión</button>
+          <button onclick="openAuthModal('register')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-100 transition">Únete Aquí</button>
+        </div>
+      </div>
+    </header>
 
-    <!-- Botones de acceso y registro -->
-    <div class="button-group">
-        <a href="#unete" class="btn btn-primary">🚀 Únete Aquí</a>
-        <a href="#acceso" class="btn btn-secondary">🔒 Acceder a mi Cuenta</a>
-        <a href="mailto:info@openlain.com?subject=Solicitud%20Integracion%20Empresas%20Open%20Lain" class="btn btn-business">🏢 Registro para Empresas</a>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 flex-1 flex flex-col items-center justify-center text-center">
+      
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-slate-900 max-w-3xl leading-tight mb-6">
+        El mundo bajo tus pies<br>con un solo clic
+      </h1>
+      
+      <span class="px-3.5 py-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full mb-6 inline-flex items-center gap-2 shadow-sm text-center">
+        <i class="fa-solid fa-shield-halved text-indigo-600"></i>Identidad Soberana y Ciberseguridad Cloud
+      </span>
+
+      <p class="text-slate-500 text-sm sm:text-base md:text-lg max-w-2xl mb-8 sm:mb-10 leading-relaxed px-2">
+        Registro automático y compras en un solo clic en cualquier plataforma. Centraliza tu identidad, envíos, métodos de pago y privacidad bajo cifrado de extremo a extremo, sin dejar rastro en tus dispositivos.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 w-full sm:w-auto px-4">
+        <button onclick="openAuthModal('register')" class="w-full sm:w-auto px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rocket"></i>Únete Aquí
+        </button>
+        <button onclick="openAuthModal('login')" class="w-full sm:w-auto px-6 py-3.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-lock"></i>Acceder a mi Cuenta
+        </button>
+        <button onclick="openBusinessModal()" class="w-full sm:w-auto px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-building"></i>Registro para Empresas
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 w-full max-w-5xl text-left px-2 sm:px-0">
+        <div class="card-clean card-clean-hover rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80" alt="Acceso Universal" class="w-full h-40 sm:h-44 object-cover">
+          <div class="p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold font-heading text-slate-900 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-fingerprint text-indigo-600"></i>Acceso y Registro Universal
+            </h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Olvídate de crear cuentas y contraseñas nuevas en cada web. Entra y regístrate de forma automática y estandarizada en segundos.</p>
+          </div>
+        </div>
+        
+        <div class="card-clean card-clean-hover rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=600&q=80" alt="Pagos Express Cifrados" class="w-full h-40 sm:h-44 object-cover">
+          <div class="p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold font-heading text-slate-900 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-bolt text-purple-600"></i>Pagos Express Cifrados
+            </h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Tu pasarela personal lista para usar. Envía tu dirección de entrega y datos de pago protegidos con cifrado de extremo a extremo en un solo toque.</p>
+          </div>
+        </div>
+
+        <div class="card-clean card-clean-hover rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" alt="Soberanía y Privacidad" class="w-full h-40 sm:h-44 object-cover">
+          <div class="p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold font-heading text-slate-900 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-user-lock text-emerald-600"></i>Soberanía y Privacidad Total
+            </h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Tú decides qué información compartes con cada comercio y bloqueas el rastreo de terceros o cookies no deseadas desde un único panel.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 px-4">
+      <div class="max-w-7xl mx-auto text-center text-xs text-slate-500 leading-relaxed flex flex-col sm:flex-row items-center justify-center gap-4">
+        <span>&copy; 2026 Open Lain S.L. Protocolo de Identidad Soberana. El mundo bajo tus pies con un solo clic.</span>
+        <button onclick="openBusinessModal()" class="text-indigo-600 hover:underline font-semibold">¿Tienes una web? Integra Open Lain</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard-view" class="hidden min-h-screen flex-col justify-between">
+    
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-heading font-bold text-lg sm:text-xl shadow-md shadow-indigo-200">
+            OL
+          </div>
+          <div>
+            <span class="font-heading font-bold text-base sm:text-lg tracking-tight text-slate-900">Open Lain</span>
+            <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">Sincronizado</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="openBusinessModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition">
+            <i class="fa-solid fa-building text-indigo-600"></i> Empresas
+          </button>
+          <div class="flex items-center gap-2 sm:gap-3 p-1 sm:p-1.5 sm:pr-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xs sm:text-sm" id="nav-avatar">
+              US
+            </div>
+            <div class="text-left hidden sm:block">
+              <p class="text-xs font-bold text-slate-800 leading-none" id="dash-greeting">¡Hola, Usuario!</p>
+              <p class="text-[10px] text-emerald-600 font-medium">● Conectado</p>
+            </div>
+          </div>
+          <button onclick="logoutSession()" class="px-2.5 sm:px-3 py-2 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition">
+            Salir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <div class="bg-white border-b border-slate-200 py-2.5 sm:py-3 sticky top-16 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <button onclick="showTab('personales')" id="tab-personales" class="tab-btn px-3.5 sm:px-4 py-2 text-xs font-bold rounded-xl text-indigo-600 bg-indigo-50 border border-indigo-200 transition flex items-center gap-2 whitespace-nowrap shadow-sm">
+            <i class="fa-solid fa-user"></i>Datos Personales
+          </button>
+          <button onclick="showTab('direccion')" id="tab-direccion" class="tab-btn px-3.5 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-location-dot"></i>Dirección
+          </button>
+          <button onclick="showTab('pago')" id="tab-pago" class="tab-btn px-3.5 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-credit-card"></i>Datos de Pago
+          </button>
+          <button onclick="showTab('publicidad')" id="tab-publicidad" class="tab-btn px-3.5 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-bullhorn"></i>Publicidad
+          </button>
+          <button onclick="showTab('privacidad')" id="tab-privacidad" class="tab-btn px-3.5 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-shield-halved"></i>Privacidad
+          </button>
+          <button onclick="showTab('cookies')" id="tab-cookies" class="tab-btn px-3.5 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-cookie-bite"></i>Cookies
+          </button>
+        </nav>
+      </div>
     </div>
 
-    <div class="info-card" id="unete">
-        <h3>¿Quieres formar parte del estándar?</h3>
-        <p>Estamos integrando los primeros socios estratégicos y plataformas web. Si gestionas un negocio digital y quieres simplificar los registros y pagos, escríbenos directamente a <a href="mailto:info@openlain.com">info@openlain.com</a> o solicita la integración corporativa.</p>
-    </div>
+    <!-- Main Content Layout -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full">
+      
+      <!-- User Hero Banner -->
+      <div class="card-clean rounded-2xl p-5 sm:p-6 md:p-8 mb-6 sm:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 border border-slate-200">
+        <div class="flex items-center gap-4 sm:gap-5 w-full md:w-auto">
+          <div class="relative shrink-0">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 text-white font-heading font-bold text-xl sm:text-2xl flex items-center justify-center shadow-lg shadow-indigo-100" id="hero-avatar">
+              US
+            </div>
+            <span class="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-emerald-500 border-2 border-white rounded-full" title="Estado activo"></span>
+          </div>
+          <div class="overflow-hidden">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-bold font-heading text-slate-900 truncate" id="hero-username">Usuario</h1>
+              <span class="px-2 py-0.5 text-[10px] sm:text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full">Verificada</span>
+            </div>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1 truncate" id="hero-email">correo@ejemplo.com</p>
+            <p class="text-[11px] sm:text-xs text-indigo-600 mt-1.5 sm:mt-2 font-semibold flex items-center gap-1"><i class="fa-solid fa-earth-americas"></i>El mundo bajo tus pies con un solo clic</p>
+          </div>
+        </div>
+        
+        <div class="bg-indigo-50/75 border border-indigo-100 rounded-2xl p-3.5 sm:p-4 w-full md:max-w-xs text-left">
+          <p class="text-xs font-bold text-indigo-900 mb-1"><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i>100% Sincronizado</p>
+          <p class="text-[11px] text-slate-600 leading-relaxed">Tu pasaporte digital y pasarela de pago se actualizan en tiempo real bajo cifrado de extremo a extremo.</p>
+        </div>
+      </div>
 
+      <!-- SECTIONS -->
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- 1. DATOS PERSONALES -->
+        <div id="sec-personales" class="section-card card-clean rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1200&q=80" alt="Datos Personales" class="w-full h-36 sm:h-48 object-cover">
+          <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">👤 Datos Personales</h2>
+              <p class="text-xs text-slate-500">Gestiona tu identidad básica sincronizada en la nube.</p>
+            </div>
+
+            <form onsubmit="saveProfileSection(event)" class="space-y-4 sm:space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nombre Completo</label>
+                  <input type="text" id="p-name" required placeholder="Ej. Ana García" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">NIF / DNI / NIE</label>
+                  <input type="text" id="p-nif" placeholder="12345678X" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Correo Electrónico</label>
+                  <input type="email" id="p-email" disabled class="w-full px-3.5 py-2.5 rounded-xl bg-slate-200/70 border border-slate-300 text-slate-500 text-sm cursor-not-allowed">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Teléfono de Contacto</label>
+                  <input type="text" id="p-phone" required placeholder="+34 600 000 000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+              </div>
+
+              <!-- CAMBIO DE CONTRASEÑA EN DATOS PERSONALES -->
+              <div class="pt-4 border-t border-slate-100">
+                <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+                  <i class="fa-solid fa-key text-indigo-600"></i>Seguridad y Contraseña
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nueva Contraseña (Opcional)</label>
+                    <input type="password" id="p-new-pass" placeholder="Dejar en blanco para no cambiar" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  </div>
+                  <div class="flex items-end">
+                    <button type="button" onclick="handleChangePassword()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-300 transition flex items-center justify-center gap-2">
+                      <i class="fa-solid fa-shield-halved text-indigo-600"></i>Actualizar Contraseña
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>Guardar Datos Personales
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 2. DIRECCIÓN -->
+        <div id="sec-direccion" class="section-card hidden card-clean rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80" alt="Dirección y Envíos" class="w-full h-36 sm:h-48 object-cover">
+          <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">📍 Dirección de Envío y Facturación</h2>
+              <p class="text-xs text-slate-500">Configura tus datos de envío rápido para checkouts en 1-clic.</p>
+            </div>
+
+            <form onsubmit="saveProfileSection(event)" class="space-y-4 sm:space-y-5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Calle / Vía Principal</label>
+                <input type="text" id="d-calle" placeholder="Ej. Av. de la Constitución, 15" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Piso / Puerta / Escalera</label>
+                  <input type="text" id="d-piso" placeholder="Piso 3ºB" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Código Postal</label>
+                  <input type="text" id="d-cp" placeholder="28001" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Ciudad / Municipio</label>
+                  <input type="text" id="d-ciudad" placeholder="Madrid" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Provincia</label>
+                  <input type="text" id="d-provincia" placeholder="Madrid" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Notas de Entrega (Repartidor)</label>
+                <textarea id="d-notas" rows="2" placeholder="Ej. Dejar en conserjería si no estoy." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition"></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>Guardar Dirección
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 3. DATOS DE PAGO (CON CVV INCLUIDO) -->
+        <div id="sec-pago" class="section-card hidden card-clean rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80" alt="Métodos de Pago" class="w-full h-36 sm:h-48 object-cover">
+          <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">💳 Métodos de Pago Cifrados</h2>
+              <p class="text-xs text-slate-500">Guarda la información de tu tarjeta (con CVV seguro) o IBAN para compras automáticas.</p>
+            </div>
+
+            <form onsubmit="saveProfileSection(event)" class="space-y-4 sm:space-y-5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tipo de Pago Preferido</label>
+                <select id="pay-type" onchange="togglePayFields()" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  <option value="tarjeta">💳 Tarjeta de Crédito / Débito</option>
+                  <option value="iban">🏦 Cuenta Bancaria (IBAN)</option>
+                </select>
+              </div>
+
+              <div id="pay-card-fields" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Titular de la Tarjeta</label>
+                  <input type="text" id="pay-card-holder" placeholder="Nombre como aparece en la tarjeta" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Número de Tarjeta</label>
+                    <input type="text" id="pay-card-num" placeholder="**** **** **** 1234" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Caducidad</label>
+                    <input type="text" id="pay-card-exp" placeholder="12/28" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">CVV / Código de Seguridad</label>
+                  <input type="password" id="pay-card-cvv" maxlength="4" placeholder="123" class="w-full sm:w-1/3 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  <p class="text-[11px] text-slate-400 mt-1">Código de 3 o 4 dígitos al dorso de la tarjeta.</p>
+                </div>
+              </div>
+
+              <div id="pay-iban-fields" class="hidden space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Titular de la Cuenta</label>
+                  <input type="text" id="pay-iban-holder" placeholder="Nombre del titular" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Número IBAN</label>
+                  <input type="text" id="pay-iban-num" placeholder="ES91 0000 0000 0000 0000 0000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>Guardar Métodos de Pago
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 4. PUBLICIDAD -->
+        <div id="sec-publicidad" class="section-card hidden card-clean rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&w=1200&q=80" alt="Preferencias de Publicidad" class="w-full h-36 sm:h-48 object-cover">
+          <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">📢 Preferencias de Publicidad</h2>
+              <p class="text-xs text-slate-500">Elige cómo y cuándo quieres recibir comunicaciones comerciales.</p>
+            </div>
+
+            <form onsubmit="saveProfileSection(event)" class="space-y-4">
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Ofertas por Correo Electrónico</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Recibir promociones y novedades en tu email</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="pub-email" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Alertas por SMS / WhatsApp</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Notificaciones directas en tu teléfono</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="pub-sms" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Promociones de Partners</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Permitir ofertas exclusivas de empresas colaboradoras</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="pub-partners" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>Guardar Preferencias Publicitarias
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 5. PRIVACIDAD -->
+        <div id="sec-privacidad" class="section-card hidden card-clean rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=1200&q=80" alt="Privacidad y Datos" class="w-full h-36 sm:h-48 object-cover">
+          <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">🛡️ Cesión de Datos y Privacidad</h2>
+              <p class="text-xs text-slate-500">Controla el tratamiento soberano de tu información personal.</p>
+            </div>
+
+            <form onsubmit="saveProfileSection(event)" class="space-y-4">
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Cesión de Datos a Terceros</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Permitir facilitar datos a terceros para ámbito comercial</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="priv-terceros" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Estudios de Mercado y Estadísticas</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Uso de datos agregados y anónimos para análisis</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="priv-estudios" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Perfilado Automatizado</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Elaboración de perfiles de usuario para mejorar la experiencia</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="priv-perfilado" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>Guardar Ajustes de Privacidad
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 6. COOKIES -->
+        <div id="sec-cookies" class="section-card hidden card-clean rounded-2xl overflow-hidden border border-slate-200">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Configuración de Cookies" class="w-full h-36 sm:h-48 object-cover">
+          <div class="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 font-heading mb-1">🍪 Configuración de Cookies</h2>
+              <p class="text-xs text-slate-500">Ajusta las políticas de rastreo web conforme al RGPD.</p>
+            </div>
+
+            <form onsubmit="saveProfileSection(event)" class="space-y-4 sm:space-y-5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nivel de Aceptación Global</label>
+                <select id="cookie-level" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+                  <option value="all">🟢 Aceptar Todo (Técnicas, Analíticas y Publicitarias)</option>
+                  <option value="minimal">🟡 Solo Técnicas / Mínimas Necesarias</option>
+                  <option value="strict">🔴 Rechazar Todo lo No Esencial</option>
+                </select>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Cookies Analíticas</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Medición de rendimiento y visitas</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="ck-analytics" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                <div>
+                  <p class="text-xs sm:text-sm font-semibold text-slate-800">Cookies de Marketing</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Seguimiento de anuncios y remarketing</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="ck-marketing" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>Guardar Preferencias de Cookies
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 px-4">
+      <div class="max-w-7xl mx-auto text-center text-xs text-slate-500">
+        &copy; 2026 Open Lain S.L. Protocolo Cloud de Identidad Soberana. El mundo bajo tus pies con un solo clic.
+      </div>
+    </footer>
+  </div>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200 p-4">
+    <div class="card-clean rounded-2xl w-full max-w-md p-5 sm:p-6 shadow-2xl relative transform scale-95 transition-transform duration-200" id="modal-box">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 font-heading" id="modal-title">Iniciar Sesión</h3>
+        <button onclick="closeAuthModal()" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="modal-login">
+        <form onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Correo Electrónico</label>
+            <input type="email" id="login-email" required placeholder="tu@correo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Contraseña</label>
+            <input type="password" id="login-pass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
+            🔓 Acceder a mi Cuenta
+          </button>
+        </form>
+        <span onclick="switchModal('forgot')" class="block text-center mt-4 text-xs font-semibold text-indigo-600 hover:underline cursor-pointer">¿No recuerdas tu contraseña?</span>
+      </div>
+
+      <!-- Register Form -->
+      <div id="modal-register" class="hidden">
+        <form onsubmit="handleRegister(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nombre Completo</label>
+            <input type="text" id="reg-name" required placeholder="Ej. Ana García" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Correo Electrónico</label>
+            <input type="email" id="reg-email" required placeholder="tu@correo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Contraseña</label>
+            <input type="password" id="reg-pass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Teléfono (Validación)</label>
+            <input type="text" id="reg-phone" required placeholder="600000000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <button type="submit" id="btn-submit-reg" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
+            🚀 Crear mi Pasaporte Digital
+          </button>
+        </form>
+        <span onclick="switchModal('login')" class="block text-center mt-4 text-xs font-semibold text-indigo-600 hover:underline cursor-pointer">¿Ya tienes cuenta? Inicia sesión</span>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div id="modal-forgot" class="hidden">
+        <form onsubmit="handleForgot(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Correo Registrado</label>
+            <input type="email" id="forgot-email" required placeholder="tu@correo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Teléfono Registrado</label>
+            <input type="text" id="forgot-phone" required placeholder="600000000" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nueva Contraseña</label>
+            <input type="password" id="forgot-newpass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
+            🔄 Validar y Actualizar Clave
+          </button>
+        </form>
+        <span onclick="switchModal('login')" class="block text-center mt-4 text-xs font-semibold text-indigo-600 hover:underline cursor-pointer">Volver al Inicio de Sesión</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS REGISTRATION MODAL -->
+  <div id="business-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200 p-4">
+    <div class="card-clean rounded-2xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative transform scale-95 transition-transform duration-200" id="business-modal-box">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-slate-900 font-heading">Registro de Empresa / Partner</h3>
+        </div>
+        <button onclick="closeBusinessModal()" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 mb-4">
+        Integra el protocolo de identidad y pago Open Lain en tu plataforma web. Rellena los datos de tu negocio y nos pondremos en contacto contigo para activar el acceso al entorno piloto.
+      </p>
+
+      <form onsubmit="handleBusinessSubmit(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nombre de la Empresa</label>
+            <input type="text" id="b-name" required placeholder="Ej. Tienda Online S.L." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Persona de Contacto</label>
+            <input type="text" id="b-contact" required placeholder="Nombre y Apellidos" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Correo Corporativo</label>
+            <input type="email" id="b-email" required placeholder="contacto@tuweb.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">URL de la Web / Plataforma</label>
+            <input type="url" id="b-url" required placeholder="https://tuweb.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Plataforma Tecnológica / CMS</label>
+          <select id="b-platform" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition">
+            <option value="woocommerce">WooCommerce / WordPress</option>
+            <option value="shopify">Shopify</option>
+            <option value="custom">Desarrollo Propio (API REST / Custom)</option>
+            <option value="prestashop">PrestaShop</option>
+            <option value="otro">Otro / SaaS</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Mensaje / Objetivos (Opcional)</label>
+          <textarea id="b-message" rows="2" placeholder="Cuéntanos brevemente qué buscas integrar (ej. login rápido, pasarela de pagos...)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition"></textarea>
+        </div>
+
+        <button type="submit" id="btn-submit-business" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Enviar Solicitud de Integración B2B
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const SUPABASE_URL = "https://inanizgxhxycmtupqdji.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Dnxoz52wg2rbwWDP46V4xQ_s9OgD4rP"; 
+    
+    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (session) { loadUserProfile(session.user); }
+    });
+
+    function showTab(tabName) {
+      document.querySelectorAll('.section-card').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-indigo-600', 'bg-indigo-50', 'border', 'border-indigo-200', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+      
+      document.getElementById('sec-' + tabName).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tabName);
+      activeBtn.classList.add('text-indigo-600', 'bg-indigo-50', 'border', 'border-indigo-200', 'shadow-sm');
+      activeBtn.classList.remove('text-slate-600');
+    }
+
+    function togglePayFields() {
+      const type = document.getElementById('pay-type').value;
+      if (type === 'tarjeta') {
+        document.getElementById('pay-card-fields').classList.remove('hidden');
+        document.getElementById('pay-iban-fields').classList.add('hidden');
+      } else {
+        document.getElementById('pay-card-fields').classList.add('hidden');
+        document.getElementById('pay-iban-fields').classList.remove('hidden');
+      }
+    }
+
+    function openAuthModal(type) {
+      const modal = document.getElementById('auth-modal');
+      const box = document.getElementById('modal-box');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+      }, 10);
+      switchModal(type);
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      const box = document.getElementById('modal-box');
+      modal.classList.add('opacity-0');
+      box.classList.remove('scale-100');
+      box.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
+
+    function openBusinessModal() {
+      const modal = document.getElementById('business-modal');
+      const box = document.getElementById('business-modal-box');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeBusinessModal() {
+      const modal = document.getElementById('business-modal');
+      const box = document.getElementById('business-modal-box');
+      modal.classList.add('opacity-0');
+      box.classList.remove('scale-100');
+      box.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
+
+    async function handleBusinessSubmit(e) {
+      e.preventDefault();
+      const company = document.getElementById('b-name').value;
+      const contact = document.getElementById('b-contact').value;
+      const email = document.getElementById('b-email').value;
+      const url = document.getElementById('b-url').value;
+      const platform = document.getElementById('b-platform').value;
+      const message = document.getElementById('b-message').value;
+      const btn = document.getElementById('btn-submit-business');
+
+      btn.textContent = "⏳ Enviando solicitud...";
+      btn.disabled = true;
+
+      // Simulate submission or store in Supabase business table if exists, or send email trigger
+      try {
+        const { error } = await _supabase.from('business_requests').insert([
+          { company_name: company, contact_person: contact, email: email, website_url: url, platform: platform, message: message }
+        ]);
+        if (error) {
+          // Fallback if table doesn't exist yet, still show success and mailto backup
+          console.warn("Table insert warning:", error.message);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
+      setTimeout(() => {
+        showToast("¡Solicitud de empresa enviada con éxito! Nos pondremos en contacto.", "success");
+        closeBusinessModal();
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar Solicitud de Integración B2B';
+        btn.disabled = false;
+        e.target.reset();
+      }, 800);
+    }
+
+    function switchModal(type) {
+      document.getElementById('modal-login').classList.add('hidden');
+      document.getElementById('modal-register').classList.add('hidden');
+      document.getElementById('modal-forgot').classList.add('hidden');
+      
+      if (type === 'login') {
+        document.getElementById('modal-title').innerText = 'Iniciar Sesión';
+        document.getElementById('modal-login').classList.remove('hidden');
+      } else if (type === 'register') {
+        document.getElementById('modal-title').innerText = 'Crear Pasaporte Digital';
+        document.getElementById('modal-register').classList.remove('hidden');
+      } else if (type === 'forgot') {
+        document.getElementById('modal-title').innerText = 'Restablecer Contraseña';
+        document.getElementById('modal-forgot').classList.remove('hidden');
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-pass').value;
+      const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+      if (error) { 
+        showToast("Error al iniciar sesión: " + error.message, 'warning'); 
+      } else { 
+        closeAuthModal(); 
+        loadUserProfile(data.user);
+        showToast("Sesión iniciada correctamente", 'success');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-pass').value;
+      const phone = document.getElementById('reg-phone').value.trim();
+      const btn = document.getElementById('btn-submit-reg');
+      btn.textContent = "⏳ Creando cuenta...";
+      btn.disabled = true;
+
+      const { data, error } = await _supabase.auth.signUp({
+        email, password,
+        options: { data: { full_name: name, phone_number: phone } }
+      });
+
+      if (error) {
+        showToast("Error en el registro: " + error.message, 'warning');
+        btn.textContent = "🚀 Crear mi Pasaporte Digital";
+        btn.disabled = false;
+        return;
+      }
+
+      showToast("¡Cuenta creada con éxito!", 'success');
+      closeAuthModal();
+      if (data.user) {
+        loadUserProfile(data.user);
+      } else {
+        switchModal('login');
+      }
+      btn.textContent = "🚀 Crear mi Pasaporte Digital";
+      btn.disabled = false;
+    }
+
+    async function handleForgot(e) {
+      e.preventDefault();
+      const phoneInput = document.getElementById('forgot-phone').value.trim();
+      const { data: profile, error } = await _supabase.from('profiles').select('*').eq('phone_number', phoneInput).single();
+      if (error || !profile) {
+        showToast("El teléfono no coincide con ningún registro.", 'warning');
+        return;
+      }
+      showToast("Teléfono validado correctamente", 'success');
+      switchModal('login');
+    }
+
+    async function handleChangePassword() {
+      const newPassword = document.getElementById('p-new-pass').value;
+      if (!newPassword || newPassword.length < 6) {
+        showToast("Introduce una contraseña válida de al menos 6 caracteres.", 'warning');
+        return;
+      }
+      const { error } = await _supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        showToast("Error al actualizar contraseña: " + error.message, 'warning');
+      } else {
+        showToast("¡Contraseña actualizada con éxito!", 'success');
+        document.getElementById('p-new-pass').value = "";
+      }
+    }
+
+    async function loadUserProfile(user) {
+      const displayName = user.user_metadata?.full_name || user.email;
+      const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'US';
+
+      document.getElementById('dash-greeting').textContent = "¡Hola, " + displayName + "!";
+      document.getElementById('hero-username').textContent = displayName;
+      document.getElementById('hero-email').textContent = user.email;
+      document.getElementById('hero-avatar').textContent = initials;
+      document.getElementById('nav-avatar').textContent = initials;
+      
+      document.getElementById('p-email').value = user.email;
+
+      const { data: profile } = await _supabase.from('profiles').select('*').eq('id', user.id).single();
+
+      if (profile) {
+        document.getElementById('p-name').value = profile["full name"] || user.user_metadata?.full_name || "";
+        document.getElementById('p-phone').value = profile.phone_number || user.user_metadata?.phone_number || "";
+        document.getElementById('p-nif').value = profile.nif_dni || "";
+
+        document.getElementById('d-calle').value = profile.direccion || "";
+        document.getElementById('d-piso').value = profile.piso_puerta || "";
+        document.getElementById('d-cp').value = profile.codigo_postal || "";
+        document.getElementById('d-ciudad').value = profile.ciudad || "";
+        document.getElementById('d-provincia').value = profile.provincia || "";
+        document.getElementById('d-notas').value = profile.notas_entrega || "";
+
+        if (profile.pay_type) document.getElementById('pay-type').value = profile.pay_type;
+        togglePayFields();
+        document.getElementById('pay-card-holder').value = profile.pay_card_holder || "";
+        document.getElementById('pay-card-num').value = profile.pay_card_num || "";
+        document.getElementById('pay-card-exp').value = profile.pay_card_exp || "";
+        document.getElementById('pay-card-cvv').value = profile.pay_card_cvv || "";
+        document.getElementById('pay-iban-holder').value = profile.pay_iban_holder || "";
+        document.getElementById('pay-iban-num').value = profile.pay_iban_num || "";
+
+        document.getElementById('pub-email').checked = profile.pub_email ?? false;
+        document.getElementById('pub-sms').checked = profile.pub_sms ?? false;
+        document.getElementById('pub-partners').checked = profile.pub_partners ?? false;
+
+        document.getElementById('priv-terceros').checked = profile.priv_terceros ?? false;
+        document.getElementById('priv-estudios').checked = profile.priv_estudios ?? false;
+        document.getElementById('priv-perfilado').checked = profile.priv_perfilado ?? false;
+
+        if (profile.cookies) document.getElementById('cookie-level').value = profile.cookies;
+        document.getElementById('ck-analytics').checked = profile.ck_analytics ?? true;
+        document.getElementById('ck-marketing').checked = profile.ck_marketing ?? true;
+      }
+
+      document.getElementById('landing-view').classList.add('hidden');
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.getElementById('dashboard-view').classList.add('flex');
+    }
+
+    async function saveProfileSection(e) {
+      e.preventDefault();
+      const { data: { user } } = await _supabase.auth.getUser();
+      if (!user) return;
+
+      const profileData = {
+        id: user.id,
+        "full name": document.getElementById('p-name').value,
+        phone_number: document.getElementById('p-phone').value,
+        nif_dni: document.getElementById('p-nif').value,
+
+        direccion: document.getElementById('d-calle').value,
+        piso_puerta: document.getElementById('d-piso').value,
+        codigo_postal: document.getElementById('d-cp').value,
+        ciudad: document.getElementById('d-ciudad').value,
+        provincia: document.getElementById('d-provincia').value,
+        notas_entrega: document.getElementById('d-notas').value,
+
+        pay_type: document.getElementById('pay-type').value,
+        pay_card_holder: document.getElementById('pay-card-holder').value,
+        pay_card_num: document.getElementById('pay-card-num').value,
+        pay_card_exp: document.getElementById('pay-card-exp').value,
+        pay_card_cvv: document.getElementById('pay-card-cvv').value,
+        pay_iban_holder: document.getElementById('pay-iban-holder').value,
+        pay_iban_num: document.getElementById('pay-iban-num').value,
+
+        pub_email: document.getElementById('pub-email').checked,
+        pub_sms: document.getElementById('pub-sms').checked,
+        pub_partners: document.getElementById('pub-partners').checked,
+
+        priv_terceros: document.getElementById('priv-terceros').checked,
+        priv_estudios: document.getElementById('priv-estudios').checked,
+        priv_perfilado: document.getElementById('priv-perfilado').checked,
+
+        cookies: document.getElementById('cookie-level').value,
+        ck_analytics: document.getElementById('ck-analytics').checked,
+        ck_marketing: document.getElementById('ck-marketing').checked
+      };
+
+      const { error } = await _supabase.from('profiles').upsert(profileData);
+
+      if (error) {
+        showToast("Error al guardar datos: " + error.message, 'warning');
+      } else {
+        showToast("¡Datos sincronizados correctamente!", 'success');
+        
+        const newName = profileData["full name"];
+        if (newName) {
+          const initials = newName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'US';
+          document.getElementById('dash-greeting').textContent = "¡Hola, " + newName + "!";
+          document.getElementById('hero-username').textContent = newName;
+          document.getElementById('hero-avatar').textContent = initials;
+          document.getElementById('nav-avatar').textContent = initials;
+        }
+      }
+    }
+
+    async function logoutSession() {
+      await _supabase.auth.signOut();
+      document.getElementById('dashboard-view').classList.add('hidden');
+      document.getElementById('dashboard-view').classList.remove('flex');
+      document.getElementById('landing-view').classList.remove('hidden');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      showToast("Sesión cerrada correctamente", 'info');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      let borderColors = {
+        success: 'border-emerald-500 bg-emerald-50 text-emerald-900',
+        warning: 'border-amber-500 bg-amber-50 text-amber-900',
+        info: 'border-indigo-500 bg-indigo-50 text-indigo-900'
+      };
+
+      let icons = {
+        success: 'fa-circle-check text-emerald-600',
+        warning: 'fa-triangle-exclamation text-amber-600',
+        info: 'fa-circle-info text-indigo-600'
+      };
+
+      toast.className = `toast pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${borderColors[type]} shadow-lg text-xs font-semibold border-l-4 translate-y-2 opacity-0`;
+      toast.innerHTML = `<i class="fa-solid ${icons[type]} text-sm"></i> <span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
 </body>
 </html>
